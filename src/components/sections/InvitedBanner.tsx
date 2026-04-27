@@ -90,9 +90,11 @@ export function InvitedBanner() {
         </motion.p>
       </div>
 
-      {/* Plant — slides up and fades in behind the text */}
+      {/* Plant — slides up and fades in behind the text.
+          translateX via style (not CSS class) so FM doesn't clobber it. */}
       <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1512px] pointer-events-none"
+        className="absolute bottom-0 w-[1512px] pointer-events-none"
+        style={{ left: '50%', translateX: '-50%' }}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
         transition={{ duration: 1.3, delay: 0.4, ease: 'easeOut' }}
