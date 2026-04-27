@@ -27,7 +27,6 @@ export function InvitedBanner() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -80px 0px' })
 
-  // All elements start in final position, just invisible — no y-shift so layout never jumps
   const show = (delay: number) => ({
     initial: { opacity: 0 },
     animate: { opacity: inView ? 1 : 0 },
@@ -41,26 +40,34 @@ export function InvitedBanner() {
     >
       <div className="relative z-10 pb-[500px]">
 
-        {/* "You're invited" arc — fades in second, already in place above names */}
-        <motion.div {...show(0.4)}>
+        {/* "You're invited" arc — fades in after names */}
+        <motion.div {...show(0.5)}>
           <YoureInvitedArc />
         </motion.div>
 
-        {/* Names — shared component with layoutId, flies in from splash position */}
-        <CoupleNames className="mt-4" />
+        {/* Names — invisible at first, fade in as a unit with short delay */}
+        <motion.div className="mt-4" {...show(0.15)}>
+          <CoupleNames />
+        </motion.div>
 
-        {/* Bride parent line */}
+        {/* Parent lines */}
         <motion.p
-          className="mt-2 font-garamond text-parentage font-bold uppercase tracking-ui-label"
-          {...show(0.65)}
+          className="mt-3 font-garamond text-parentage font-bold uppercase tracking-ui-label"
+          {...show(0.6)}
+        >
+          Son of Tjan Soen Eng &amp; Mirjam Nugraha
+        </motion.p>
+        <motion.p
+          className="mt-1 font-garamond text-parentage font-bold uppercase tracking-ui-label"
+          {...show(0.7)}
         >
           Daughter of Alouisius Maseimilian &amp; Venny Martadinata
         </motion.p>
 
-        {/* Date — darkest colour, matches Figma #241000 */}
+        {/* Date */}
         <motion.p
           className="mt-8 font-sans text-body text-wedding-ink"
-          {...show(0.8)}
+          {...show(0.85)}
         >
           Friday, December 18th 2026
           <span className="mx-2">·</span>
@@ -68,8 +75,7 @@ export function InvitedBanner() {
         </motion.p>
       </div>
 
-      {/* Plant — slides up and fades in behind the text.
-          translateX via style (not CSS class) so FM doesn't clobber it. */}
+      {/* Plant — slides up and fades in behind the text */}
       <motion.div
         className="absolute bottom-0 w-[1512px] pointer-events-none"
         style={{ left: '50%', translateX: '-50%' }}
