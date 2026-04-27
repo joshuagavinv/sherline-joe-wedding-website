@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useParallax } from '@/hooks/useParallax'
+import { PhotoFrame } from '@/components/ui/PhotoFrame'
 
 const galleryPhotos = [
   { src: '/assets/photo-1.png', alt: 'Joseph and Sherline' },
@@ -12,12 +13,9 @@ function ParallaxPhoto({ src, alt, speed }: { src: string; alt: string; speed: n
   const { ref, y } = useParallax(speed)
   return (
     <div ref={ref} className="overflow-hidden">
-      <motion.img
-        src={src}
-        alt={alt}
-        className="w-full object-cover grayscale"
-        style={{ y }}
-      />
+      <motion.div style={{ y }}>
+        <PhotoFrame src={src} alt={alt} imgClassName="w-full" />
+      </motion.div>
     </div>
   )
 }

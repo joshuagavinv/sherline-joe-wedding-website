@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { PhotoFrame } from '@/components/ui/PhotoFrame'
 
 const photos = [
   { src: '/assets/photo-1.png', alt: 'Joseph and Sherline', rotate: '-3deg' },
@@ -47,17 +48,18 @@ export function OurStory() {
             photos.map((photo, i) => (
               <motion.div
                 key={photo.src}
-                className="absolute inset-0 border-photo border-wedding-photo-border overflow-hidden"
-                style={{ rotate: photo.rotate }}
+                className="absolute inset-0"
+                style={{ zIndex: photos.length - i }}
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 - i * 0.02, zIndex: photos.length - i }}
+                animate={{ opacity: 1, scale: 1 - i * 0.02 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
               >
-                <img
+                <PhotoFrame
                   src={photo.src}
                   alt={photo.alt}
-                  className="h-full w-full object-cover grayscale"
+                  rotate={photo.rotate}
+                  className="h-full"
                 />
               </motion.div>
             ))
@@ -73,15 +75,14 @@ export function OurStory() {
               {photos.map((photo, i) => (
                 <motion.div
                   key={photo.src}
-                  className="overflow-hidden border-photo border-wedding-photo-border"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
                 >
-                  <img
+                  <PhotoFrame
                     src={photo.src}
                     alt={photo.alt}
-                    className="h-40 w-full object-cover grayscale"
+                    imgClassName="h-40"
                   />
                 </motion.div>
               ))}
