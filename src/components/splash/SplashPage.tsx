@@ -24,26 +24,18 @@ export function SplashPage({ onComplete }: SplashPageProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* ── Outermost gray halo ring ── */}
+      {/* ── Outer warm-brown ellipse ── */}
       <motion.div
-        className="absolute rounded-full bg-wedding-gray"
-        style={{ width: 165, height: 219 }}
-        animate={expanding ? { scale: 8, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={{ duration: 1.1, ease: 'easeInOut' }}
-      />
-
-      {/* ── Middle warm-brown ring with cream outline ── */}
-      <motion.div
-        className="absolute rounded-full bg-wedding-warm-brown border border-wedding-cream"
-        style={{ width: 157, height: 205 }}
+        className="absolute bg-wedding-warm-brown"
+        style={{ width: 157, height: 205, borderRadius: '50%' }}
         animate={expanding ? { scale: 7.5, opacity: 0 } : { scale: 1, opacity: 1 }}
         transition={{ duration: 1.0, ease: 'easeInOut' }}
       />
 
       {/* ── Cream oval — expands to fill the screen ── */}
       <motion.div
-        className="absolute rounded-full bg-wedding-cream"
-        style={{ width: 144, height: 191 }}
+        className="absolute bg-wedding-cream"
+        style={{ width: 144, height: 191, borderRadius: '50%' }}
         animate={expanding ? { scale: 8 } : { scale: 1 }}
         transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1.0] }}
         onAnimationComplete={() => {
@@ -57,7 +49,7 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         alt=""
         aria-hidden="true"
         className="absolute pointer-events-none"
-        style={{ width: 80, height: 86, zIndex: 12, marginTop: -40 }}
+        style={{ width: 80, height: 86, zIndex: 12 }}
         animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.25 }}
       />
