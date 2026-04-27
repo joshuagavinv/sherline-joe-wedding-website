@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-warm-brown: theme('colors.wedding.warm-brown');
+  --color-cream: theme('colors.wedding.cream');
+  --color-dark-brown: theme('colors.wedding.dark-brown');
+  --color-sage: theme('colors.wedding.sage');
+  --color-sage-muted: theme('colors.wedding.sage-muted');
+  --color-sage-light: theme('colors.wedding.sage-light');
+  --color-photo-border: theme('colors.wedding.photo-border');
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-sans text-wedding-dark-brown bg-white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
