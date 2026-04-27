@@ -7,7 +7,7 @@ interface PageShellProps {
 
 export function PageShell({ children, className }: PageShellProps) {
   return (
-    <div className="min-h-screen w-full bg-white flex justify-center">
+    <div className="min-h-screen w-full bg-wedding-cream flex justify-center">
       <div className={cn('w-full max-w-canvas', className)}>{children}</div>
     </div>
   )
