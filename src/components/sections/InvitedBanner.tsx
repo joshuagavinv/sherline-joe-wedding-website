@@ -1,13 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-const VISIBLE = { opacity: 1, y: 0 }
-const HIDDEN_Y = (y = 12) => ({ opacity: 0, y })
-
-function t(delay: number) {
-  return { duration: 0.7, delay, ease: 'easeOut' } as const
-}
-
 function YoureInvitedArc() {
   return (
     <svg
@@ -33,55 +26,63 @@ export function InvitedBanner() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -80px 0px' })
 
+  // All elements start in final position, just invisible — no y-shift so layout never jumps
+  const show = (delay: number) => ({
+    initial: { opacity: 0 },
+    animate: { opacity: inView ? 1 : 0 },
+    transition: { duration: 0.65, delay, ease: 'easeOut' as const },
+  })
+
   return (
     <section
       ref={ref}
       className="relative overflow-hidden bg-wedding-cream px-8 pt-16 text-center text-wedding-dark-brown"
     >
-      <div className="relative z-10 pb-96">
+      <div className="relative z-10 pb-[500px]">
 
-        {/* Names — carry over from splash, appear immediately */}
-        <motion.div
-          initial={HIDDEN_Y(0)}
-          animate={inView ? VISIBLE : HIDDEN_Y(0)}
-          transition={t(0)}
-        >
-          <p className="font-serif text-display leading-none">Joseph</p>
-          <p className="font-serif text-connector text-wedding-dark-brown/50 my-1">and</p>
-          <p className="font-serif text-display leading-none">Sherline</p>
-        </motion.div>
-
-        {/* "You're invited" curved text — appears after names */}
-        <motion.div
-          className="mt-6"
-          initial={HIDDEN_Y()}
-          animate={inView ? VISIBLE : HIDDEN_Y()}
-          transition={t(0.45)}
-        >
+        {/* "You're invited" arc — fades in second, already in place above names */}
+        <motion.div {...show(0.4)}>
           <YoureInvitedArc />
         </motion.div>
 
-        {/* Parent names */}
-        <motion.div
-          className="mt-4 space-y-1"
-          initial={HIDDEN_Y()}
-          animate={inView ? VISIBLE : HIDDEN_Y()}
-          transition={t(0.65)}
-        >
-          <p className="font-garamond text-parentage font-bold uppercase tracking-ui-label">
-            Son of Tjan Soen Eng &amp; Mirjam Nugraha
-          </p>
-          <p className="font-garamond text-parentage font-bold uppercase tracking-ui-label">
-            Daughter of Alouisius Maseimilian &amp; Venny Martadinata
-          </p>
-        </motion.div>
+        {/* Joseph — fades in first (carried over from splash) */}
+        <motion.p className="mt-4 font-serif text-display leading-none" {...show(0)}>
+          Joseph
+        </motion.p>
 
-        {/* Date — ink colour matches Figma #241000 */}
+        {/* Groom parent line */}
         <motion.p
-          className="mt-6 font-sans text-body text-wedding-ink"
-          initial={HIDDEN_Y()}
-          animate={inView ? VISIBLE : HIDDEN_Y()}
-          transition={t(0.85)}
+          className="mt-2 font-garamond text-parentage font-bold uppercase tracking-ui-label"
+          {...show(0.55)}
+        >
+          Son of Tjan Soen Eng &amp; Mirjam Nugraha
+        </motion.p>
+
+        {/* "and" — fades in with names */}
+        <motion.p
+          className="font-serif text-connector text-wedding-dark-brown/50 my-1"
+          {...show(0.05)}
+        >
+          and
+        </motion.p>
+
+        {/* Sherline — fades in with names */}
+        <motion.p className="font-serif text-display leading-none" {...show(0.1)}>
+          Sherline
+        </motion.p>
+
+        {/* Bride parent line */}
+        <motion.p
+          className="mt-2 font-garamond text-parentage font-bold uppercase tracking-ui-label"
+          {...show(0.65)}
+        >
+          Daughter of Alouisius Maseimilian &amp; Venny Martadinata
+        </motion.p>
+
+        {/* Date — darkest colour, matches Figma #241000 */}
+        <motion.p
+          className="mt-8 font-sans text-body text-wedding-ink"
+          {...show(0.8)}
         >
           Friday, December 18th 2026
           <span className="mx-2">·</span>
@@ -89,12 +90,12 @@ export function InvitedBanner() {
         </motion.p>
       </div>
 
-      {/* Plant — fades and slides up */}
+      {/* Plant — slides up and fades in behind the text */}
       <motion.div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1512px] pointer-events-none"
-        initial={{ opacity: 0, y: 40 }}
-        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 50 }}
+        transition={{ duration: 1.3, delay: 0.4, ease: 'easeOut' }}
       >
         <img src="/assets/plants-bg.svg" alt="" className="w-full" />
       </motion.div>
