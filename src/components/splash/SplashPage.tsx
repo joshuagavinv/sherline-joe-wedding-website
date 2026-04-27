@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import logoSvg from '@/assets/logo.svg'
+import monogramSvg from '@/assets/monogram.svg'
 
 type Phase = 'idle' | 'expanding'
 
@@ -48,6 +49,17 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         onAnimationComplete={() => {
           if (expanding) onComplete()
         }}
+      />
+
+      {/* ── JS monogram — sits above the botanical illustration ── */}
+      <motion.img
+        src={monogramSvg}
+        alt=""
+        aria-hidden="true"
+        className="absolute pointer-events-none"
+        style={{ width: 80, height: 86, zIndex: 12, marginTop: -40 }}
+        animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }}
       />
 
       {/* ── Botanical logo — fades out on tap ── */}
