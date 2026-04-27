@@ -24,9 +24,9 @@ export function SplashPage({ onComplete }: SplashPageProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* ── Outer warm-brown ellipse ── */}
+      {/* ── Outer warm-brown ellipse — 1px cream inside stroke (matches Figma) ── */}
       <motion.div
-        className="absolute bg-wedding-warm-brown"
+        className="absolute bg-wedding-warm-brown ring-1 ring-inset ring-wedding-cream"
         style={{ width: 157, height: 205, borderRadius: '50%' }}
         animate={expanding ? { scale: 7.5, opacity: 0 } : { scale: 1, opacity: 1 }}
         transition={{ duration: 1.0, ease: 'easeInOut' }}
@@ -43,23 +43,23 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         }}
       />
 
-      {/* ── JS monogram — sits above the botanical illustration ── */}
+      {/* ── JS monogram — behind botanical illustration ── */}
       <motion.img
         src={monogramSvg}
         alt=""
         aria-hidden="true"
         className="absolute pointer-events-none"
-        style={{ width: 80, height: 86, zIndex: 12 }}
+        style={{ width: 80, height: 86, zIndex: 10 }}
         animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.25 }}
       />
 
-      {/* ── Botanical logo — fades out on tap ── */}
+      {/* ── Botanical logo — in front of monogram ── */}
       <motion.img
         src={logoSvg}
         alt="Joseph & Sherline"
         className="absolute pointer-events-none"
-        style={{ width: 131, height: 158, zIndex: 10 }}
+        style={{ width: 131, height: 158, zIndex: 12 }}
         animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.25 }}
       />
