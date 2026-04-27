@@ -5,7 +5,7 @@ const meta: Meta<typeof SplashPage> = {
   title: 'Splash/SplashPage',
   component: SplashPage,
   parameters: { layout: 'fullscreen' },
-  args: { onTap: () => {} },
+  args: { onComplete: () => {} },
 }
 export default meta
 

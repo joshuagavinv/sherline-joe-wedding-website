@@ -63,6 +63,7 @@ src/index.css                 ← exposes tokens as CSS custom properties
 | `wedding-sage-muted` | `#83887F` | Muted sage variant |
 | `wedding-sage-light` | `#B2BE83` | Light sage variant |
 | `wedding-photo-border` | `#E4E3C3` | 6px frame border on photos |
+| `wedding-gray` | `#D9D9D9` | Outermost halo ring on splash screen |
 
 ### Typography tokens
 
@@ -105,8 +106,7 @@ src/
     layout/
       PageShell.tsx           ← max-w-canvas centering wrapper
     splash/
-      SplashPage.tsx          ← full-screen tap-to-start (AppState: 'splash')
-      SplashReveal.tsx        ← warm-brown overlay transition (AppState: 'reveal')
+      SplashPage.tsx          ← handles both idle and expanding phases internally
     sections/
       InvitedBanner.tsx       ← warm-brown bg, couple names + parent lines
       OurStory.tsx            ← story text + 4-photo tap-to-fan/collapse
@@ -134,6 +134,7 @@ src/
 
 public/
   assets/
+    logo.svg                  ← Botanical logo (Figma node 45:1539, SVG export)
     photo-1.png               ← IMG_7771 (Figma node 45:2299, imageRef d0b0ca1c...)
     photo-2.png               ← 4c0b793b (Figma node 45:2317, imageRef 23fad861...)
     photo-3.png               ← IMG_0613 (Figma node 45:2322, imageRef 0c6d2539...)
@@ -146,14 +147,18 @@ public/
 ## App state machine
 
 ```
-AppState: 'splash' | 'reveal' | 'main'
+AppState: 'splash' | 'main'
 
-splash  →(tap)→  reveal  →(animation done)→  main
+splash  →(oval expansion done)→  main
 main    →(RestartButton)→  splash
 ```
 
-- `SplashPage` and `SplashReveal` use Framer Motion `AnimatePresence`
-- Restart: `scrollTo(0)` then `setState('splash')` after 400ms
+`SplashPage` manages its own internal phase (`'idle' | 'expanding'`):
+- **idle:** warm-brown bg, 3 concentric ovals, botanical logo SVG, pulsing "Tap to start"
+- **expanding:** cream oval scales to 8× (fills screen), rings fade out, logo fades, names appear
+- Calls `onComplete()` when the scale animation finishes → App switches to `'main'`
+
+Restart: `scrollTo(0)` then `setState('splash')` after 400ms
 
 ---
 
