@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import logoSvg from '@/assets/logo.svg'
+import { CoupleNames } from '@/components/ui/CoupleNames'
 
 type Phase = 'idle' | 'expanding'
 
@@ -28,7 +29,7 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         className="absolute bg-wedding-cream"
         style={{ width: 144, height: 191, borderRadius: '50%' }}
         animate={expanding ? { scale: 8 } : { scale: 1 }}
-        transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1.0] }}
+        transition={{ duration: 1.8, ease: [0.25, 0.1, 0.25, 1.0] }}
         onAnimationComplete={() => {
           if (expanding) onComplete()
         }}
@@ -44,24 +45,17 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         transition={{ duration: 0.25 }}
       />
 
-      {/* ── Names — fade in over the expanding cream oval ── */}
+      {/* ── Names — rendered outside the fading wrapper so layoutId source
+           stays visible while the splash background exits ── */}
       <AnimatePresence>
         {expanding && (
           <motion.div
-            className="absolute z-20 flex flex-col items-center"
+            className="absolute z-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.38, duration: 0.55 }}
+            transition={{ delay: 0.3, duration: 0.7 }}
           >
-            <p className="font-serif text-display text-wedding-dark-brown leading-none">
-              Joseph
-            </p>
-            <p className="font-serif text-connector text-wedding-dark-brown/50 my-1">
-              and
-            </p>
-            <p className="font-serif text-display text-wedding-dark-brown leading-none">
-              Sherline
-            </p>
+            <CoupleNames />
           </motion.div>
         )}
       </AnimatePresence>

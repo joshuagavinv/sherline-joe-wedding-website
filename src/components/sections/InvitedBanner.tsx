@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { CoupleNames } from '@/components/ui/CoupleNames'
 
 function YoureInvitedArc() {
   return (
@@ -45,31 +46,8 @@ export function InvitedBanner() {
           <YoureInvitedArc />
         </motion.div>
 
-        {/* Joseph — fades in first (carried over from splash) */}
-        <motion.p className="mt-4 font-serif text-display leading-none" {...show(0)}>
-          Joseph
-        </motion.p>
-
-        {/* Groom parent line */}
-        <motion.p
-          className="mt-2 font-garamond text-parentage font-bold uppercase tracking-ui-label"
-          {...show(0.55)}
-        >
-          Son of Tjan Soen Eng &amp; Mirjam Nugraha
-        </motion.p>
-
-        {/* "and" — fades in with names */}
-        <motion.p
-          className="font-serif text-connector text-wedding-dark-brown/50 my-1"
-          {...show(0.05)}
-        >
-          and
-        </motion.p>
-
-        {/* Sherline — fades in with names */}
-        <motion.p className="font-serif text-display leading-none" {...show(0.1)}>
-          Sherline
-        </motion.p>
+        {/* Names — shared component with layoutId, flies in from splash position */}
+        <CoupleNames className="mt-4" />
 
         {/* Bride parent line */}
         <motion.p

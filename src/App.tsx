@@ -23,7 +23,7 @@ export default function App() {
   }, [])
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {state === 'splash' ? (
         <SplashPage key="splash" onComplete={handleSplashComplete} />
       ) : (
