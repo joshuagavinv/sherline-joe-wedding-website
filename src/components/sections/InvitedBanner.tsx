@@ -36,33 +36,23 @@ export function InvitedBanner() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden bg-wedding-cream px-8 pt-16 text-center text-wedding-dark-brown"
+      className="relative overflow-hidden bg-wedding-cream min-h-screen flex flex-col items-center justify-center px-8 text-center text-wedding-dark-brown"
     >
-      <div className="relative z-10 pb-[500px]">
+      {/* Text content — vertically centred, sits above the plant */}
+      <div className="relative z-10 py-16 w-full">
 
-        {/* "You're invited" arc — fades in after names */}
+        {/* "You're invited" arc */}
         <motion.div {...show(0.5)}>
           <YoureInvitedArc />
         </motion.div>
 
-        {/* Names — invisible at first, fade in as a unit with short delay */}
+        {/* Names fade in first, in place — parents interspersed per Figma */}
         <motion.div className="mt-4" {...show(0.15)}>
-          <CoupleNames />
+          <CoupleNames
+            groomParent="Son of Tjan Soen Eng & Mirjam Nugraha"
+            brideParent="Daughter of Alouisius Maseimilian & Venny Martadinata"
+          />
         </motion.div>
-
-        {/* Parent lines */}
-        <motion.p
-          className="mt-3 font-garamond text-parentage font-bold uppercase tracking-ui-label"
-          {...show(0.6)}
-        >
-          Son of Tjan Soen Eng &amp; Mirjam Nugraha
-        </motion.p>
-        <motion.p
-          className="mt-1 font-garamond text-parentage font-bold uppercase tracking-ui-label"
-          {...show(0.7)}
-        >
-          Daughter of Alouisius Maseimilian &amp; Venny Martadinata
-        </motion.p>
 
         {/* Date */}
         <motion.p
@@ -75,7 +65,7 @@ export function InvitedBanner() {
         </motion.p>
       </div>
 
-      {/* Plant — slides up and fades in behind the text */}
+      {/* Plant — slides up from the bottom */}
       <motion.div
         className="absolute bottom-0 w-[1512px] pointer-events-none"
         style={{ left: '50%', translateX: '-50%' }}
