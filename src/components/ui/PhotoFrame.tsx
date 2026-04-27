@@ -11,14 +11,16 @@ interface PhotoFrameProps {
 export function PhotoFrame({ src, alt, rotate, className, imgClassName }: PhotoFrameProps) {
   return (
     <div
-      className={cn('overflow-hidden border-photo border-wedding-photo-border', className)}
+      className={cn('border-photo border-wedding-photo-border', className)}
       style={rotate ? { rotate } : undefined}
     >
-      <img
-        src={src}
-        alt={alt}
-        className={cn('h-full w-full object-cover grayscale', imgClassName)}
-      />
+      <div className="overflow-hidden h-full w-full">
+        <img
+          src={src}
+          alt={alt}
+          className={cn('h-full w-full object-cover grayscale', imgClassName)}
+        />
+      </div>
     </div>
   )
 }
