@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import logoSvg from '@/assets/logo.svg'
-import monogramSvg from '@/assets/monogram.svg'
 
 type Phase = 'idle' | 'expanding'
 
@@ -24,14 +23,6 @@ export function SplashPage({ onComplete }: SplashPageProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* ── Outer warm-brown ellipse — 1px cream inside stroke (matches Figma) ── */}
-      <motion.div
-        className="absolute bg-wedding-warm-brown ring-1 ring-inset ring-wedding-cream"
-        style={{ width: 157, height: 205, borderRadius: '50%' }}
-        animate={expanding ? { scale: 7.5, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={{ duration: 1.0, ease: 'easeInOut' }}
-      />
-
       {/* ── Cream oval — expands to fill the screen ── */}
       <motion.div
         className="absolute bg-wedding-cream"
@@ -43,23 +34,12 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         }}
       />
 
-      {/* ── JS monogram — behind botanical illustration ── */}
-      <motion.img
-        src={monogramSvg}
-        alt=""
-        aria-hidden="true"
-        className="absolute pointer-events-none"
-        style={{ width: 80, height: 86, zIndex: 10 }}
-        animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
-        transition={{ duration: 0.25 }}
-      />
-
-      {/* ── Botanical logo — in front of monogram ── */}
+      {/* ── Logo (warm-brown ellipse + cream oval + monogram + botanical, all-in-one Figma export) ── */}
       <motion.img
         src={logoSvg}
         alt="Joseph & Sherline"
         className="absolute pointer-events-none"
-        style={{ width: 131, height: 158, zIndex: 12 }}
+        style={{ width: 157, height: 205, zIndex: 10 }}
         animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.25 }}
       />
