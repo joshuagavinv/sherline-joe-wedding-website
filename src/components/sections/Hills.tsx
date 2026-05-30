@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import type { CSSProperties } from 'react'
+import { assetUrl } from '@/lib/utils'
 
 // Layered hills scene (Figma node 91:1784 / registry → "Hills").
 // Layers run back → front; z-index follows array order. The hill silhouettes
@@ -21,8 +22,8 @@ type Layer = {
   range: number
 }
 
-const HILL = '/assets/Hills/hills_shapes'
-const STEM = '/assets/Hills/hills_stems_smil'
+const HILL = assetUrl('/assets/Hills/hills_shapes')
+const STEM = assetUrl('/assets/Hills/hills_stems_smil')
 
 // Native hills-frame aspect ratio (Figma frame 91:157 = 1512 × 412.895).
 const SCENE_RATIO = 412.895 / 1512 // ≈ 0.2731 (height ÷ width)

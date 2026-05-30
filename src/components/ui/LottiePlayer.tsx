@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import _Lottie, { type LottieRef } from 'lottie-react'
-import { cn } from '@/lib/utils'
+import { cn, assetUrl } from '@/lib/utils'
 
 // lottie-react is CJS; Vite wraps the whole exports object as the default
 // export instead of unwrapping `.default`. Handle both resolutions.
@@ -31,7 +31,7 @@ export function LottiePlayer({
   useEffect(() => {
     if (!src) return
     let cancelled = false
-    fetch(src)
+    fetch(assetUrl(src))
       .then(r => r.json())
       .then(json => { if (!cancelled) setData(json) })
     return () => { cancelled = true }

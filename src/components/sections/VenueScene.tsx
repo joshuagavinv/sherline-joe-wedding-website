@@ -1,20 +1,21 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { assetUrl } from '@/lib/utils'
 
 // Building layers: width × height derived from each SVG's viewBox
 // parallaxRange: back layers move more (deeper), front layers move less
 const BUILDING_LAYERS = [
-  { src: '/assets/Venue/venue_back_rooms.svg',  w: 1734, h: 118, z: 1, range: 90 },
-  { src: '/assets/Venue/venue_main_tower.svg',  w: 174,  h: 320, z: 2, range: 55 },
-  { src: '/assets/Venue/venue_front_gates.svg', w: 1670, h: 41,  z: 3, range: 25 },
-  { src: '/assets/Venue/venue_balcony.svg',     w: 175,  h: 76,  z: 4, range: 12 },
+  { src: assetUrl('/assets/Venue/venue_back_rooms.svg'),  w: 1734, h: 118, z: 1, range: 90 },
+  { src: assetUrl('/assets/Venue/venue_main_tower.svg'),  w: 174,  h: 320, z: 2, range: 55 },
+  { src: assetUrl('/assets/Venue/venue_front_gates.svg'), w: 1670, h: 41,  z: 3, range: 25 },
+  { src: assetUrl('/assets/Venue/venue_balcony.svg'),     w: 175,  h: 76,  z: 4, range: 12 },
 ]
 
 const CLOUDS = [
-  { src: '/assets/Venue/cloud_1.svg', className: 'w-40', top: '28%', duration: '30s', delay: '-5s',  vw: 224, vh: 25 },
-  { src: '/assets/Venue/cloud_2.svg', className: 'w-72', top: '15%', duration: '45s', delay: '-20s', vw: 501, vh: 80 },
-  { src: '/assets/Venue/cloud_3.svg', className: 'w-24', top: '35%', duration: '35s', delay: '-12s', vw: 139, vh: 24 },
-  { src: '/assets/Venue/cloud_4.svg', className: 'w-12', top: '22%', duration: '22s', delay: '-8s',  vw: 55,  vh: 17 },
+  { src: assetUrl('/assets/Venue/cloud_1.svg'), className: 'w-40', top: '28%', duration: '30s', delay: '-5s',  vw: 224, vh: 25 },
+  { src: assetUrl('/assets/Venue/cloud_2.svg'), className: 'w-72', top: '15%', duration: '45s', delay: '-20s', vw: 501, vh: 80 },
+  { src: assetUrl('/assets/Venue/cloud_3.svg'), className: 'w-24', top: '35%', duration: '35s', delay: '-12s', vw: 139, vh: 24 },
+  { src: assetUrl('/assets/Venue/cloud_4.svg'), className: 'w-12', top: '22%', duration: '22s', delay: '-8s',  vw: 55,  vh: 17 },
 ]
 
 export function VenueScene() {

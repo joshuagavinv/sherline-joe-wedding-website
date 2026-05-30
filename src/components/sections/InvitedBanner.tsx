@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 import { LottiePlayer } from '@/components/ui/LottiePlayer'
+import { assetUrl } from '@/lib/utils'
 
 const LEAF_BASE = '/assets/Landing/01%20Falling%20leaves/leaves%20json/'
 
@@ -56,7 +57,7 @@ export function InvitedBanner() {
         transition={{ duration: 1.3, delay: 0.4, ease: 'easeOut' }}
       >
         {/* Base static flower field */}
-        <img src="/assets/plants-bg.svg" alt="" className="absolute bottom-0 w-full" />
+        <img src={assetUrl('/assets/plants-bg.svg')} alt="" className="absolute bottom-0 w-full" />
 
         {/* Animated stems — bottom-aligned, back to front */}
         <div className="absolute bottom-0 left-0 w-full" style={{ height: 594 }}>

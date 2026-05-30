@@ -1,27 +1,28 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { assetUrl } from '@/lib/utils'
 
 const COLORS = [
-  { src: '/assets/Attire/color1.svg', w: 25, h: 31 },
-  { src: '/assets/Attire/color2.svg', w: 31, h: 28 },
-  { src: '/assets/Attire/color4.svg', w: 31, h: 28 },
-  { src: '/assets/Attire/color5.svg', w: 26, h: 32 },
-  { src: '/assets/Attire/color6.svg', w: 24, h: 32 },
-  { src: '/assets/Attire/color7.svg', w: 29, h: 30 },
+  { src: assetUrl('/assets/Attire/color1.svg'), w: 25, h: 31 },
+  { src: assetUrl('/assets/Attire/color2.svg'), w: 31, h: 28 },
+  { src: assetUrl('/assets/Attire/color4.svg'), w: 31, h: 28 },
+  { src: assetUrl('/assets/Attire/color5.svg'), w: 26, h: 32 },
+  { src: assetUrl('/assets/Attire/color6.svg'), w: 24, h: 32 },
+  { src: assetUrl('/assets/Attire/color7.svg'), w: 29, h: 30 },
 ]
 
 const ATTIRE_HEIGHT = 240
 const GHOST = 0.12 // opacity of the off-centre "shadow" look
 
 const LOOKS = [
-  { src: '/assets/Attire/suit.svg', label: 'Black tie', sub: 'Gentlemen' },
-  { src: '/assets/Attire/dress.svg', label: 'Evening dress', sub: 'Ladies' },
+  { src: assetUrl('/assets/Attire/suit.svg'), label: 'Black tie', sub: 'Gentlemen' },
+  { src: assetUrl('/assets/Attire/dress.svg'), label: 'Evening dress', sub: 'Ladies' },
 ]
 
 function Platform() {
   return (
     <img
-      src="/assets/Attire/platform.svg"
+      src={assetUrl('/assets/Attire/platform.svg')}
       alt=""
       aria-hidden="true"
       className="mx-auto block"

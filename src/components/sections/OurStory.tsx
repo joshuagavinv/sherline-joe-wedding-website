@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { VenueScene } from '@/components/sections/VenueScene'
+import { assetUrl } from '@/lib/utils'
 
 const photos = [
-  { src: '/assets/ourstory-1.png', alt: 'Joseph and Sherline' },
-  { src: '/assets/ourstory-2.png', alt: 'Our story' },
-  { src: '/assets/ourstory-3.png', alt: 'Together' },
-  { src: '/assets/ourstory-4.png', alt: 'Us' },
+  { src: assetUrl('/assets/ourstory-1.png'), alt: 'Joseph and Sherline' },
+  { src: assetUrl('/assets/ourstory-2.png'), alt: 'Our story' },
+  { src: assetUrl('/assets/ourstory-3.png'), alt: 'Together' },
+  { src: assetUrl('/assets/ourstory-4.png'), alt: 'Us' },
 ]
 
 export function OurStory() {
@@ -55,7 +56,7 @@ export function OurStory() {
                 <div className="border-photo border-wedding-photo-border bg-wedding-cream w-full h-full overflow-hidden flex flex-col items-center justify-center gap-3">
                   <div style={{ rotate: '-2.5deg' }}>
                     <img
-                      src="/assets/ourstory-stars.svg"
+                      src={assetUrl('/assets/ourstory-stars.svg')}
                       alt=""
                       className="w-[130px] h-[100px] object-contain"
                     />
