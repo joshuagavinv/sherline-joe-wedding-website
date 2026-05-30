@@ -1,38 +1,59 @@
 import { motion } from 'framer-motion'
 
+function WeddingDayArc() {
+  return (
+    <svg
+      viewBox="0 0 240 65"
+      width="240"
+      height="65"
+      aria-hidden="true"
+      className="mx-auto overflow-visible"
+    >
+      <defs>
+        <path id="weddingDayArc" d="M 5,55 Q 120,28 235,55" fill="none" />
+      </defs>
+      <text fontFamily="'EB Garamond', serif" fontSize="16.19" fill="currentColor" fontStyle="italic">
+        <textPath href="#weddingDayArc" startOffset="50%" textAnchor="middle">
+          The Wedding Day
+        </textPath>
+      </text>
+    </svg>
+  )
+}
+
 const events = [
   {
     title: 'Holy Matrimony',
     time: '11:30 AM',
-    venue: 'Mary Immaculate Catholic Church',
-    address: 'Waverley NSW',
+    venueLines: ['Mary Immaculate Catholic Church,', 'Waverley NSW'],
   },
   {
     title: 'The Reception',
-    time: '5:30 PM',
-    venue: 'Grand Banquet Room at Curzon Hall',
-    address: 'Marsfield NSW',
+    time: '6:00 PM',
+    venueLines: ['Grand Banquet Room', 'at Curzon Hall, Marsfield NSW'],
   },
 ]
 
 export function WeddingDay() {
   return (
-    <section className="bg-wedding-cream px-8 py-16">
-      <motion.p
-        className="font-garamond text-subhead font-medium text-wedding-warm-brown uppercase tracking-ui-label"
+    <section className="bg-wedding-cream px-8 py-16 text-center">
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        The Wedding Day
-      </motion.p>
+        <WeddingDayArc />
+        <p className="mt-4 font-garamond text-subhead font-medium text-wedding-dark-brown">
+          Friday, December 18th 2026
+        </p>
+      </motion.div>
 
-      <div className="mt-8 space-y-6">
+      <div className="mt-16 flex flex-col gap-[72px]">
         {events.map((event, i) => (
           <motion.div
             key={event.title}
-            className="border border-wedding-dark-brown/20 bg-white p-6"
+            className="flex flex-col items-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -41,15 +62,14 @@ export function WeddingDay() {
             <h3 className="font-serif text-heading text-wedding-dark-brown">
               {event.title}
             </h3>
-            <p className="mt-3 font-sans text-body font-medium text-wedding-warm-brown">
-              {event.time}
-            </p>
-            <p className="mt-1 font-sans text-body text-wedding-dark-brown/70">
-              {event.venue}
-            </p>
-            <p className="font-sans text-caption text-wedding-dark-brown/50">
-              {event.address}
-            </p>
+            <div className="flex flex-col items-center gap-2 font-sans text-body font-medium text-wedding-dark-brown tracking-[-0.24px]">
+              <p className="leading-[1.14]">{event.time}</p>
+              <div>
+                {event.venueLines.map((line) => (
+                  <p key={line} className="leading-[1.26]">{line}</p>
+                ))}
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>

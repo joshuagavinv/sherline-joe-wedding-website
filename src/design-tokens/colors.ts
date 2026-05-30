@@ -8,4 +8,5 @@ export const weddingColors = {
   'photo-border': '#E4E3C3',
   'gray': '#D9D9D9',
   'ink': '#241000',
+  'story-bg': '#909663',
 } as const

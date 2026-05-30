@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
-import Lottie, { type LottieRef } from 'lottie-react'
+import _Lottie, { type LottieRef } from 'lottie-react'
 import { cn } from '@/lib/utils'
+
+// lottie-react is CJS; Vite wraps the whole exports object as the default
+// export instead of unwrapping `.default`. Handle both resolutions.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Lottie = ((_Lottie as any).default ?? _Lottie) as typeof _Lottie
 
 interface LottiePlayerProps {
   /** Inline Lottie JSON (from a direct import). Mutually exclusive with `src`. */

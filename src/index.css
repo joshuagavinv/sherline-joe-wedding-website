@@ -22,3 +22,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
+
+.attire-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.attire-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes cloudDrift {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(calc(100vw + 100%)); }
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import logoSvg from '@/assets/logo.svg'
+import { LottiePlayer } from '@/components/ui/LottiePlayer'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 
 type Phase = 'idle' | 'expanding'
@@ -55,15 +55,15 @@ export function SplashPage({ onComplete }: SplashPageProps) {
         ))}
       </AnimatePresence>
 
-      {/* ── Logo (warm-brown ellipse + cream oval + monogram + botanical, all-in-one Figma export) ── */}
-      <motion.img
-        src={logoSvg}
-        alt="Joseph & Sherline"
+      {/* ── Monogram Lottie animation — intentionally larger than the oval so botanicals overlap the edge ── */}
+      <motion.div
         className="absolute pointer-events-none"
-        style={{ width: 157, height: 205, zIndex: 10 }}
+        style={{ width: 185, height: 226, zIndex: 10, clipPath: 'ellipse(72px 95.5px at 50% 50%)' }}
         animate={expanding ? { opacity: 0, scale: 0.85 } : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.25 }}
-      />
+      >
+        <LottiePlayer src="/assets/Monogram/monogram.json" />
+      </motion.div>
 
       {/* ── Names — rendered outside the fading wrapper so layoutId source
            stays visible while the splash background exits ── */}

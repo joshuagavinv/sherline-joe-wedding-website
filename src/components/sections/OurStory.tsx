@@ -1,99 +1,162 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { PhotoFrame } from '@/components/ui/PhotoFrame'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { VenueScene } from '@/components/sections/VenueScene'
 
 const photos = [
-  { src: '/assets/photo-1.png', alt: 'Joseph and Sherline', rotate: '-3deg' },
-  { src: '/assets/photo-2.png', alt: 'Our story', rotate: '2deg' },
-  { src: '/assets/photo-3.png', alt: 'Together', rotate: '-1.5deg' },
-  { src: '/assets/photo-4.png', alt: 'Us', rotate: '3.5deg' },
+  { src: '/assets/ourstory-1.png', alt: 'Joseph and Sherline' },
+  { src: '/assets/ourstory-2.png', alt: 'Our story' },
+  { src: '/assets/ourstory-3.png', alt: 'Together' },
+  { src: '/assets/ourstory-4.png', alt: 'Us' },
 ]
 
 export function OurStory() {
-  const [expanded, setExpanded] = useState(false)
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -80px 0px' })
+  const [covered, setCovered] = useState(true)
+  const [topIdx, setTopIdx] = useState(0)
+  const [generation, setGeneration] = useState(0)
+
+  const remaining = photos.length - topIdx
+  const stackPhotos = photos.slice(topIdx).map((p, stackPos) => ({ ...p, stackPos }))
+
+  function handleTap() {
+    if (covered) {
+      setCovered(false)
+    } else if (topIdx < photos.length) {
+      setTopIdx(i => i + 1)
+    } else {
+      setTopIdx(0)
+      setGeneration(g => g + 1)
+    }
+  }
 
   return (
-    <section className="px-8 py-16">
-      <motion.h2
-        className="font-serif text-display text-wedding-dark-brown"
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-      >
-        Our Story
-      </motion.h2>
-
-      <motion.p
-        className="mt-6 font-sans text-body text-wedding-dark-brown/70"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2, duration: 0.7 }}
-      >
-        We started off as two little kids who grew into the best version of
-        ourselves — together. Through every adventure, every quiet moment, and
-        every laugh shared, we found in each other a home.
-      </motion.p>
-
+    <section ref={ref} className="bg-wedding-story-bg pt-16 pb-0">
+      <div className="w-full max-w-canvas mx-auto">
       {/* Photo stack */}
-      <div
-        className="relative mt-10 h-64 cursor-pointer"
-        onClick={() => setExpanded((v) => !v)}
-        role="button"
-        aria-label={expanded ? 'Collapse photos' : 'Expand photos'}
-      >
-        <AnimatePresence initial={false}>
-          {!expanded ? (
-            photos.map((photo, i) => (
+      <div className="flex flex-col items-center">
+        <motion.div
+          className="relative cursor-pointer"
+          style={{ width: 230, height: 270 }}
+          onClick={handleTap}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          <AnimatePresence initial={false}>
+            {/* Cover card — photo-0 with starfish illustration */}
+            {covered && (
               <motion.div
-                key={photo.src}
-                className="absolute inset-0"
-                style={{ zIndex: photos.length - i }}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 - i * 0.02 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.4 }}
+                key="cover"
+                className="absolute"
+                style={{ width: 190, height: 225, top: 'calc(50% - 112px)', left: 'calc(50% - 95px)', zIndex: 30, rotate: '2.5deg' }}
+                exit={{ y: -380, opacity: 0, transition: { duration: 0.38, ease: 'easeIn' } }}
               >
-                <PhotoFrame
-                  src={photo.src}
-                  alt={photo.alt}
-                  rotate={photo.rotate}
-                  className="h-full"
-                />
+                <div className="border-photo border-wedding-photo-border bg-wedding-cream w-full h-full overflow-hidden flex flex-col items-center justify-center gap-3">
+                  <div style={{ rotate: '-2.5deg' }}>
+                    <img
+                      src="/assets/ourstory-stars.svg"
+                      alt=""
+                      className="w-[130px] h-[100px] object-contain"
+                    />
+                  </div>
+                  {/* Pulsing "Tap" label */}
+                  <motion.span
+                    className="font-sans text-caption text-wedding-dark-brown uppercase tracking-ui-label"
+                    animate={{ opacity: [0.35, 1, 0.35] }}
+                    transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                  >
+                    Tap
+                  </motion.span>
+                </div>
               </motion.div>
-            ))
-          ) : (
-            <motion.div
-              key="grid"
-              className="grid grid-cols-2 gap-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              {photos.map((photo, i) => (
+            )}
+
+            {/* Photo stack — revealed after cover is dismissed */}
+            {!covered && (
+              remaining > 0 ? (
+                stackPhotos.map(photo => {
+                  const depth = Math.min(photo.stackPos, 2)
+                  return (
+                    <motion.div
+                      key={`${generation}-${photo.src}`}
+                      className="absolute inset-0"
+                      style={{ zIndex: stackPhotos.length - photo.stackPos }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1, y: depth * 10, scale: 1 - depth * 0.03 }}
+                      exit={{ y: -380, opacity: 0, transition: { duration: 0.38, ease: 'easeIn' } }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                    >
+                      <div className="overflow-hidden w-full h-full">
+                        <img
+                          src={photo.src}
+                          alt={photo.alt}
+                          className="w-full h-full object-contain grayscale"
+                        />
+                      </div>
+                    </motion.div>
+                  )
+                })
+              ) : (
                 <motion.div
-                  key={photo.src}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
+                  key="done"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  <PhotoFrame
-                    src={photo.src}
-                    alt={photo.alt}
-                    imgClassName="h-40"
-                  />
+                  <p className="font-garamond text-subhead text-wedding-cream/60 italic">
+                    That's us ♡
+                  </p>
+                  <motion.span
+                    className="font-sans text-caption text-wedding-cream/40 uppercase tracking-ui-label"
+                    animate={{ opacity: [0.3, 0.9, 0.3] }}
+                    transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                  >
+                    Tap to replay
+                  </motion.span>
                 </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              )
+            )}
+          </AnimatePresence>
+
+        </motion.div>
       </div>
 
-      <p className="mt-4 text-center font-sans text-caption text-wedding-warm-brown uppercase tracking-ui-label">
-        {expanded ? 'Tap to stack' : 'Tap to explore'}
-      </p>
+      {/* Heading + body */}
+      <div className="px-8 mt-10 text-center text-wedding-cream">
+        <motion.h2
+          className="font-serif text-display"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 10 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+        >
+          Our Story
+        </motion.h2>
+
+        <motion.div
+          className="mt-6 mx-auto w-full max-w-52 font-sans text-body space-y-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: inView ? 1 : 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+        >
+          <p>
+            We bonded over curiosity, good conversation, and an impressive ability to turn "What should we eat?" into a full discussion. Banter quickly became our love language, equal parts dry humor, cynicism, and saying things that would sound mildly concerning out of context.
+          </p>
+          <p>
+            We keep the spark alive through creativity, curiosity, and conversations that bounce between life's biggest questions and completely unserious gossip.
+          </p>
+          <p>
+            Beneath all of that, though, we love deeply, feel deeply, and somehow make each other feel at home. So here we are, choosing each other forever (though Joe might argue padel is a very close second), even if dinner still takes a while to decide.
+          </p>
+        </motion.div>
+      </div>
+      </div>
+
+      <div className="h-16" />
+
+      {/* Venue building + clouds — anchored to bottom of the green section */}
+      <VenueScene />
     </section>
   )
 }

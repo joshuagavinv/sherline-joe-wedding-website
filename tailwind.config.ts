@@ -43,6 +43,9 @@ const config: Config = {
       borderWidth: {
         photo: '6px',
       },
+      animation: {
+        cloud: 'cloudDrift var(--cloud-duration, 30s) linear var(--cloud-delay, 0s) infinite',
+      },
     },
   },
   plugins: [],
