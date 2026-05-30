@@ -28,6 +28,7 @@ export function OurStory() {
     } else {
       setTopIdx(0)
       setGeneration(g => g + 1)
+      setCovered(true)
     }
   }
 
@@ -51,6 +52,9 @@ export function OurStory() {
                 key="cover"
                 className="absolute"
                 style={{ width: 190, height: 225, top: 'calc(50% - 112px)', left: 'calc(50% - 95px)', zIndex: 30, rotate: '2.5deg' }}
+                initial={{ opacity: 0, y: 36, scale: 0.93 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
                 exit={{ y: -380, opacity: 0, transition: { duration: 0.38, ease: 'easeIn' } }}
               >
                 <div className="border-photo border-wedding-photo-border bg-wedding-cream w-full h-full overflow-hidden flex flex-col items-center justify-center gap-3">
@@ -83,10 +87,10 @@ export function OurStory() {
                       key={`${generation}-${photo.src}`}
                       className="absolute inset-0"
                       style={{ zIndex: stackPhotos.length - photo.stackPos }}
-                      initial={{ opacity: 0 }}
+                      initial={{ opacity: 0, y: photo.stackPos === 0 ? -18 : 6, scale: photo.stackPos === 0 ? 0.93 : 0.97 }}
                       animate={{ opacity: 1, y: depth * 10, scale: 1 - depth * 0.03 }}
                       exit={{ y: -380, opacity: 0, transition: { duration: 0.38, ease: 'easeIn' } }}
-                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                      transition={{ duration: 0.38, ease: [0.34, 1.2, 0.64, 1], delay: photo.stackPos * 0.05 }}
                     >
                       <div className="overflow-hidden w-full h-full">
                         <img
@@ -102,9 +106,10 @@ export function OurStory() {
                 <motion.div
                   key="done"
                   className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.22 } }}
+                  transition={{ delay: 0.3, duration: 0.3 }}
                 >
                   <p className="font-garamond text-subhead text-wedding-cream/60 italic">
                     That's us ♡
