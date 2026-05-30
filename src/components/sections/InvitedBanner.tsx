@@ -39,7 +39,7 @@ export function InvitedBanner() {
 
         {/* Date */}
         <motion.p
-          className="mt-32 mb-16 font-sans text-body text-wedding-ink"
+          className="mt-16 mb-16 font-sans text-body text-wedding-ink"
           {...show(0.85)}
         >
           Friday, December 18th 2026

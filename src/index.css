@@ -17,7 +17,7 @@ html {
 }
 
 body {
-  @apply font-sans text-wedding-dark-brown bg-white;
+  @apply font-sans text-wedding-dark-brown bg-wedding-cream;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
