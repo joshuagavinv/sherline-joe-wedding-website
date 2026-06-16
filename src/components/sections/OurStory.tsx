@@ -46,26 +46,36 @@ export function OurStory() {
           transition={{ duration: 0.7, delay: 0.1 }}
         >
           <AnimatePresence initial={false}>
-            {/* Cover card — photo-0 with starfish illustration */}
+            {/* Ghost stack cards behind cover */}
+            {covered && (
+              <motion.div
+                key="cover-ghosts"
+                className="absolute inset-0"
+                style={{ zIndex: 27 }}
+                exit={{ opacity: 0, transition: { duration: 0.25 } }}
+              >
+                <div className="absolute inset-0 border-photo border-wedding-photo-border bg-wedding-cream/30" style={{ transform: 'translateY(20px) scale(0.79)' }} />
+                <div className="absolute inset-0 border-photo border-wedding-photo-border bg-wedding-cream/50" style={{ transform: 'translateY(10px) scale(0.82)' }} />
+              </motion.div>
+            )}
+
+            {/* Cover card — starfish illustration */}
             {covered && (
               <motion.div
                 key="cover"
-                className="absolute"
-                style={{ width: 190, height: 225, top: 'calc(50% - 112px)', left: 'calc(50% - 95px)', zIndex: 30, rotate: '2.5deg' }}
-                initial={{ opacity: 0, y: 36, scale: 0.93 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="absolute inset-0"
+                style={{ zIndex: 30 }}
+                initial={{ opacity: 0, y: 36, scale: 0.78 }}
+                animate={{ opacity: 1, y: 0, scale: 0.85 }}
                 transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
                 exit={{ y: -380, opacity: 0, transition: { duration: 0.38, ease: 'easeIn' } }}
               >
                 <div className="border-photo border-wedding-photo-border bg-wedding-cream w-full h-full overflow-hidden flex flex-col items-center justify-center gap-3">
-                  <div style={{ rotate: '-2.5deg' }}>
-                    <img
-                      src={assetUrl('/assets/ourstory-stars.svg')}
-                      alt=""
-                      className="w-[130px] h-[100px] object-contain"
-                    />
-                  </div>
-                  {/* Pulsing "Tap" label */}
+                  <img
+                    src={assetUrl('/assets/ourstory-stars.svg')}
+                    alt=""
+                    className="w-[130px] h-[100px] object-contain"
+                  />
                   <motion.span
                     className="font-sans text-caption text-wedding-dark-brown uppercase tracking-ui-label"
                     animate={{ opacity: [0.35, 1, 0.35] }}
@@ -111,9 +121,6 @@ export function OurStory() {
                   exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.22 } }}
                   transition={{ delay: 0.3, duration: 0.3 }}
                 >
-                  <p className="font-garamond text-subhead text-wedding-cream/60 italic">
-                    That's us ♡
-                  </p>
                   <motion.span
                     className="font-sans text-caption text-wedding-cream/40 uppercase tracking-ui-label"
                     animate={{ opacity: [0.3, 0.9, 0.3] }}

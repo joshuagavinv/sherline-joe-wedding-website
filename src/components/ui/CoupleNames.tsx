@@ -45,10 +45,27 @@ export function CoupleNames({ className, inView, hideSecondary = false }: Couple
         }
       : {}
 
+  // Uncontrolled (the shared App overlay): the primary names (Joseph / and / Sherline)
+  // stay fully visible at all times, while the secondary lines (arc + parents) fade
+  // their opacity as hideSecondary toggles — so they reveal smoothly on splash → main
+  // without ever nudging the primary names' position.
+  const secondary = (delay: number) =>
+    controlled
+      ? fade(delay)
+      : {
+          initial: { opacity: 0 },
+          animate: { opacity: hideSecondary ? 0 : 1 },
+          // Hide instantly when entering the splash (so the arc + parent lines never
+          // flicker mid-expansion); fade in gently when revealing on splash → main.
+          transition: hideSecondary
+            ? { duration: 0 }
+            : { duration: 0.6, delay, ease: 'easeOut' as const },
+        }
+
   return (
     <div className={cn('flex flex-col items-center text-center text-wedding-dark-brown', className)}>
 
-      <motion.div className={hideSecondary ? 'invisible' : undefined} {...fade(0.55)}>
+      <motion.div className={cn(controlled && hideSecondary && 'invisible')} {...secondary(0.55)}>
         <YoureInvitedArc />
       </motion.div>
 
@@ -57,13 +74,13 @@ export function CoupleNames({ className, inView, hideSecondary = false }: Couple
       </motion.p>
 
       <motion.p
-        className={cn('mt-[13px] font-garamond text-parentage font-bold uppercase tracking-ui-label', hideSecondary && 'invisible')}
-        {...fade(0.7)}
+        className={cn('mt-[13px] font-sans text-body font-medium leading-[1.14]', controlled && hideSecondary && 'invisible')}
+        {...secondary(0.7)}
       >
-        Son of Tjan Soen Eng &amp; Mirjam Nugraha
+        Son of Tjan Soen Eng <br/> and Mirjam Nugraha
       </motion.p>
 
-      <motion.p className="mt-[18px] font-serif text-connector text-wedding-dark-brown/50" {...fade(0.2)}>
+      <motion.p className="mt-[18px] font-serif text-connector text-wedding-dark-brown" {...fade(0.2)}>
         and
       </motion.p>
 
@@ -72,10 +89,10 @@ export function CoupleNames({ className, inView, hideSecondary = false }: Couple
       </motion.p>
 
       <motion.p
-        className={cn('mt-1 font-garamond text-parentage font-bold uppercase tracking-ui-label', hideSecondary && 'invisible')}
-        {...fade(0.8)}
+        className={cn('mt-1 font-sans text-body font-medium leading-[1.14]', controlled && hideSecondary && 'invisible')}
+        {...secondary(0.8)}
       >
-        Daughter of Alouisius Maseimilian &amp; Venny Martadinata
+        Daughter of Alouisius Maseimilian <br/> and Venny Martadinata
       </motion.p>
 
     </div>

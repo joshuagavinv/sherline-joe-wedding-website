@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { LottiePlayer } from '@/components/ui/LottiePlayer'
+import { MonogramOval } from '@/components/ui/MonogramOval'
 
 interface RestartButtonProps {
   onRestart: () => void
@@ -19,20 +19,15 @@ export function RestartButton({ onRestart }: RestartButtonProps) {
         aria-label="Restart"
         className="group flex flex-col items-center gap-8 cursor-pointer"
       >
-        {/* ── Cream oval + monogram — mirrors the splash idle state ── */}
-        <div className="relative flex items-center justify-center" style={{ width: 144, height: 191 }}>
-          <div className="absolute inset-0 bg-wedding-cream" style={{ borderRadius: '50%' }} />
-          <div
-            className="absolute pointer-events-none"
-            style={{ width: 185, height: 226, zIndex: 10, clipPath: 'ellipse(72px 95.5px at 50% 50%)' }}
-          >
-            <LottiePlayer src="/assets/Monogram/monogram.json" />
-          </div>
-        </div>
+        <MonogramOval />
 
-        <span className="font-sans text-body font-medium uppercase tracking-ui-label text-wedding-cream/50 transition-colors group-hover:text-wedding-cream">
+        <motion.span
+          className="font-sans text-body font-medium uppercase tracking-ui-label text-wedding-cream/50"
+          animate={{ opacity: [0.35, 1, 0.35] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+        >
           Restart
-        </span>
+        </motion.span>
       </button>
     </motion.section>
   )

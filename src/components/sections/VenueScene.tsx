@@ -30,10 +30,11 @@ export function VenueScene() {
 
   // Four explicit useTransform calls (hooks can't run in loops).
   // Back layer moves most, front layer moves least → 3D depth illusion.
-  const y0 = useTransform(scrollYProgress, [0, 1], [BUILDING_LAYERS[0].range, -BUILDING_LAYERS[0].range])
-  const y1 = useTransform(scrollYProgress, [0, 1], [BUILDING_LAYERS[1].range, -BUILDING_LAYERS[1].range])
-  const y2 = useTransform(scrollYProgress, [0, 1], [BUILDING_LAYERS[2].range, -BUILDING_LAYERS[2].range])
-  const y3 = useTransform(scrollYProgress, [0, 1], [BUILDING_LAYERS[3].range, -BUILDING_LAYERS[3].range])
+  // Parallax only during entry (0→0.5); layers settle to rest once fully in view.
+  const y0 = useTransform(scrollYProgress, [0, 0.5, 1], [BUILDING_LAYERS[0].range, 0, 0])
+  const y1 = useTransform(scrollYProgress, [0, 0.5, 1], [BUILDING_LAYERS[1].range, 0, 0])
+  const y2 = useTransform(scrollYProgress, [0, 0.5, 1], [BUILDING_LAYERS[2].range, 0, 0])
+  const y3 = useTransform(scrollYProgress, [0, 0.5, 1], [BUILDING_LAYERS[3].range, 0, 0])
   const layerY = [y0, y1, y2, y3]
 
   return (

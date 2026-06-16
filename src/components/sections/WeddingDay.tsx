@@ -12,7 +12,7 @@ function WeddingDayArc() {
       <defs>
         <path id="weddingDayArc" d="M 5,55 Q 120,28 235,55" fill="none" />
       </defs>
-      <text fontFamily="'EB Garamond', serif" fontSize="16.19" fill="currentColor" fontStyle="italic">
+      <text fontFamily="'EB Garamond', serif" fontSize="16.19" fill="currentColor">
         <textPath href="#weddingDayArc" startOffset="50%" textAnchor="middle">
           The Wedding Day
         </textPath>

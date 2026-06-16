@@ -33,5 +33,5 @@ body {
 
 @keyframes cloudDrift {
   from { transform: translateX(-100%); }
-  to   { transform: translateX(calc(100vw + 100%)); }
+  to   { transform: translateX(100vw); }
 }

@@ -57,10 +57,61 @@ export function Attire() {
       raf.current = requestAnimationFrame(paint)
     }
 
+    // scrollLeft needed to centre a slide — measured via bounding rects so it
+    // doesn't depend on the track being a positioned offsetParent.
+    const centerOf = (el: HTMLDivElement) => {
+      const tRect = track.getBoundingClientRect()
+      const r = el.getBoundingClientRect()
+      const delta = (r.left + r.width / 2) - (tRect.left + tRect.width / 2)
+      return track.scrollLeft + delta
+    }
+
+    const currentIndex = () => {
+      const tRect = track.getBoundingClientRect()
+      const tCenter = tRect.left + tRect.width / 2
+      let best = 0
+      let bestDist = Infinity
+      slideRefs.current.forEach((el, i) => {
+        if (!el) return
+        const r = el.getBoundingClientRect()
+        const dist = Math.abs(r.left + r.width / 2 - tCenter)
+        if (dist < bestDist) { bestDist = dist; best = i }
+      })
+      return best
+    }
+
+    let wheelLock = false
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return
+      // While hovering the carousel the wheel only moves slides — never the page.
+      e.preventDefault()
+      if (wheelLock) return
+      const dir = e.deltaY > 0 ? 1 : -1
+      const cur = currentIndex()
+      const next = Math.max(0, Math.min(slideRefs.current.length - 1, cur + dir))
+      if (next === cur) return // at an edge: stay put (page stays blocked)
+      const el = slideRefs.current[next]
+      if (!el) return
+      wheelLock = true
+      track.scrollTo({ left: centerOf(el), behavior: 'smooth' })
+      // release the lock once the smooth scroll settles so one tick = one slide
+      let done = false
+      const unlock = () => {
+        if (done) return
+        done = true
+        wheelLock = false
+        track.removeEventListener('scrollend', unlock)
+      }
+      track.addEventListener('scrollend', unlock)
+      setTimeout(unlock, 600) // fallback if scrollend never fires (already at edge)
+    }
+
     requestAnimationFrame(paint)
     track.addEventListener('scroll', onScroll, { passive: true })
+    track.addEventListener('wheel', onWheel, { passive: false })
     return () => {
       track.removeEventListener('scroll', onScroll)
+      track.removeEventListener('wheel', onWheel)
       cancelAnimationFrame(raf.current)
     }
   }, [])
@@ -88,7 +139,7 @@ export function Attire() {
       >
         <div
           ref={trackRef}
-          className="attire-scroll flex overflow-x-auto snap-x snap-mandatory"
+          className="attire-scroll flex overflow-x-auto snap-x snap-mandatory cursor-ew-resize"
         >
           {/* leading spacer centres the first slide */}
           <div className="shrink-0 w-[31%]" aria-hidden="true" />
@@ -159,7 +210,7 @@ export function Attire() {
       </motion.p>
 
       <motion.div
-        className="mt-[100px] mb-[70px] flex justify-center"
+        className="mt-[48px] mb-[32px] flex justify-center"
         initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
