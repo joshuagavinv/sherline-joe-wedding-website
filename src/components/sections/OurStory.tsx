@@ -33,7 +33,7 @@ export function OurStory() {
   }
 
   return (
-    <section ref={ref} className="bg-wedding-story-bg pt-16 pb-0">
+    <section ref={ref} className="bg-wedding-story-bg pt-36 pb-0">
       <div className="w-full max-w-canvas mx-auto">
       {/* Photo stack */}
       <div className="flex flex-col items-center">
