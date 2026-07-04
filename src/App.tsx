@@ -6,11 +6,11 @@ import { InvitedBanner } from '@/components/sections/InvitedBanner'
 import { OurStory } from '@/components/sections/OurStory'
 import { WeddingDay } from '@/components/sections/WeddingDay'
 import { Attire } from '@/components/sections/Attire'
+import { RSVPSection } from '@/components/sections/RSVPSection'
 import { Hills } from '@/components/sections/Hills'
 import { Gallery } from '@/components/sections/Gallery'
 import { RestartButton } from '@/components/sections/RestartButton'
 import { CoupleNames } from '@/components/ui/CoupleNames'
-import { StickyRSVPButton } from '@/components/ui/StickyRSVPButton'
 import { FallingLeaves } from '@/components/ui/FallingLeaves'
 
 type AppState = 'splash' | 'main'
@@ -70,10 +70,12 @@ export default function App() {
               <WeddingDay />
               <Attire />
             </PageShell>
+            <PageShell>
+              <RSVPSection />
+            </PageShell>
             <Hills />
             <Gallery />
             <RestartButton onRestart={handleRestart} />
-            <StickyRSVPButton />
           </motion.div>
         )}
       </AnimatePresence>

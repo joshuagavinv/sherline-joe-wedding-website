@@ -112,8 +112,8 @@ src/
       OurStory.tsx            ← story text + 4-photo tap-to-fan/collapse
       WeddingDay.tsx          ← ceremony + reception event cards
       Attire.tsx              ← dress code, 2-column, weather note
-      Logistics.tsx           ← accommodation (3 hotels) + getting around
-      RSVPSection.tsx         ← attending toggle + form → Google Sheets
+      RSVPSection.tsx         ← "RSVP via Pentamoo" + attending toggle + form → Google Sheets
+      Hills.tsx               ← parallax hills scene + Registry (wishing well / cash fund collapsibles)
       Gallery.tsx             ← 2-column parallax photo grid
       RestartButton.tsx       ← resets AppState back to 'splash'
     ui/

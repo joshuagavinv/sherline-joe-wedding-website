@@ -2,19 +2,19 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { assetUrl } from '@/lib/utils'
 
-// Scattered layout matches Figma node 109:2383 (canvas 402px wide)
+// Scattered layout matches Figma node 146:3286 (canvas 402px wide)
 // Speeds vary dramatically per layer for Apple-style depth parallax
 const PHOTOS = [
-  // top-right: couple formal — fast (foreground feel)
-  { src: assetUrl('/assets/Gallery/gallery-2.png'), alt: 'Joseph and Sherline', top: 0,   left: 257, width: 145, height: 171, speed: 80 },
+  // top-right: couple on the street — fast (foreground feel)
+  { src: assetUrl('/assets/Gallery/gallery-2.jpg'), alt: 'Joseph and Sherline', top: 0,   left: 250, width: 153, height: 171, speed: 80 },
   // left portrait — medium-fast
-  { src: assetUrl('/assets/Gallery/gallery-4.png'), alt: 'Sherline',           top: 145, left: 33,  width: 134, height: 176, speed: 55 },
-  // center large: couple dancing — slow (background / hero feel)
-  { src: assetUrl('/assets/Gallery/gallery-1.png'), alt: 'Joseph and Sherline', top: 293, left: 56,  width: 290, height: 380, speed: 20 },
+  { src: assetUrl('/assets/Gallery/gallery-4.jpg'), alt: 'Sherline',            top: 145, left: 33,  width: 134, height: 176, speed: 55 },
+  // center large: couple leaning on railing — slow (background / hero feel)
+  { src: assetUrl('/assets/Gallery/gallery-1.jpg'), alt: 'Joseph and Sherline', top: 293, left: 56,  width: 290, height: 380, speed: 20 },
   // bottom-left: holding hands — fastest (foreground pop)
-  { src: assetUrl('/assets/Gallery/gallery-3.png'), alt: 'Together',            top: 728, left: 0,   width: 145, height: 171, speed: 90 },
-  // bottom-right: couple running — medium
-  { src: assetUrl('/assets/Gallery/gallery-5.png'), alt: 'Us',                  top: 841, left: 217, width: 134, height: 176, speed: 40 },
+  { src: assetUrl('/assets/Gallery/gallery-3.jpg'), alt: 'Together',            top: 728, left: 0,   width: 228, height: 171, speed: 90 },
+  // bottom-right: Joseph portrait — medium
+  { src: assetUrl('/assets/Gallery/gallery-5.jpg'), alt: 'Joseph',              top: 841, left: 217, width: 134, height: 176, speed: 40 },
 ] as const
 
 function ParallaxPhoto({

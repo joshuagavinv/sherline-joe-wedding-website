@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import type { CSSProperties } from 'react'
-import { assetUrl } from '@/lib/utils'
+import { ChevronDown } from 'lucide-react'
+import { assetUrl, cn } from '@/lib/utils'
 
 // Layered hills scene (Figma node 91:1784 / registry → "Hills").
 // Layers run back → front; z-index follows array order. The hill silhouettes
@@ -51,13 +52,45 @@ const LAYERS: Layer[] = [
     box: { top: '50.75%', right: '0.07%', bottom: 0, left: 0 } },
 ]
 
-const ROWS_ACCOMMODATION = ['Shangri-La Sydney', 'Park Hyatt', 'Four Seasons Hotel']
-const ROWS_GETTING_AROUND = ['Uber & rideshare', 'Taxi', 'Trains & buses']
+// Registry copy (Figma node 146:1491) — placeholder gift-option details until
+// real wishing-well / cash-fund particulars are supplied.
+const REGISTRY_ITEMS = [
+  {
+    title: 'Wishing well',
+    body: "Your presence is the greatest gift to us, and we're really looking forward to celebrating with you. However, if you wish to bless us with a gift, we kindly offer the following options.",
+  },
+  {
+    title: 'Cash fund',
+    body: "Your presence is the greatest gift to us, and we're really looking forward to celebrating with you. However, if you wish to bless us with a gift, we kindly offer the following options.",
+  },
+] as const
 
-function Row({ label }: { label: string }) {
+function RegistryItem({ title, children }: { title: string; children: string }) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <div className="w-full flex items-center px-2.5 py-2 border-b border-wedding-cream/50">
-      <p className="font-sans text-body text-wedding-cream whitespace-nowrap">{label}</p>
+    <div className="w-full flex flex-col gap-[9px] border-b border-wedding-cream/50 pb-4">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex h-[26px] w-full items-center justify-between"
+      >
+        <span className="font-sans text-[14px] font-medium text-wedding-cream tracking-[-0.28px]">
+          {title}
+        </span>
+        <ChevronDown
+          className={cn('h-6 w-6 text-wedding-cream transition-transform duration-300', open && 'rotate-180')}
+        />
+      </button>
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-out"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
+      >
+        <div className="overflow-hidden">
+          <p className="font-sans text-body text-wedding-cream tracking-[-0.24px]">{children}</p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -117,40 +150,32 @@ export function Hills() {
         </div>
       </div>
 
-      {/* Content: Accommodation + Getting around (Figma node 91:822) */}
+      {/* Content: Registry (Figma node 146:1491) */}
       <motion.div
-        className="w-full max-w-canvas mx-auto px-8 pt-12 pb-20 flex flex-col gap-20"
+        className="w-full max-w-canvas mx-auto px-8 pt-12 pb-20 flex flex-col gap-6 text-wedding-cream"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '0px 0px -80px 0px' }}
         transition={{ duration: 0.6 }}
       >
-        <div className="flex flex-col gap-6 text-wedding-cream">
-          <h2 className="font-serif text-heading">Accommodation</h2>
-          <p className="font-sans text-body">
-            For guests travelling into Sydney, here are convenient hotel options near our venues:
-          </p>
-          <div className="flex flex-col gap-2.5">
-            {ROWS_ACCOMMODATION.map(label => (
-              <Row key={label} label={label} />
-            ))}
-          </div>
-          <p className="font-sans text-body">
-            We recommend booking early as weekends fill up quickly.
+        <div className="flex flex-col gap-3">
+          <h2 className="font-serif text-heading">Registry</h2>
+          <p className="font-sans text-body tracking-[-0.24px]">
+            Your presence is the greatest gift to us, and we're really looking forward to
+            celebrating with you. However, if you wish to bless us with a gift, we kindly offer
+            the following options.
           </p>
         </div>
 
-        <div className="flex flex-col gap-6 text-wedding-cream">
-          <h2 className="font-serif text-heading">Getting around</h2>
-          <p className="font-sans text-body">
-            Sydney is well-connected by Uber, taxis, and public transport.
-          </p>
-          <div className="flex flex-col gap-2.5">
-            {ROWS_GETTING_AROUND.map(label => (
-              <Row key={label} label={label} />
-            ))}
-          </div>
-        </div>
+        {REGISTRY_ITEMS.map((item) => (
+          <RegistryItem key={item.title} title={item.title}>
+            {item.body}
+          </RegistryItem>
+        ))}
+
+        <p className="font-sans text-body tracking-[-0.24px]">
+          Thank you for your generosity and love.
+        </p>
       </motion.div>
     </section>
   )

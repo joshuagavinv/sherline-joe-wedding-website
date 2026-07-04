@@ -208,21 +208,6 @@ export function Attire() {
         evenings. We suggest bringing a light layer, plus sunscreen and sunglasses for any
         outdoor moments.
       </motion.p>
-
-      <motion.div
-        className="mt-[48px] mb-[32px] flex justify-center"
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.35, duration: 0.6 }}
-      >
-        <a
-          href={import.meta.env.VITE_RSVP_URL ?? '#'}
-          className="font-serif text-heading text-wedding-dark-brown uppercase"
-        >
-          RSVP
-        </a>
-      </motion.div>
     </section>
   )
 }
