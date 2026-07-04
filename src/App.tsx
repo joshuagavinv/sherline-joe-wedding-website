@@ -11,6 +11,7 @@ import { Gallery } from '@/components/sections/Gallery'
 import { RestartButton } from '@/components/sections/RestartButton'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 import { StickyRSVPButton } from '@/components/ui/StickyRSVPButton'
+import { FallingLeaves } from '@/components/ui/FallingLeaves'
 
 type AppState = 'splash' | 'main'
 
@@ -94,6 +95,11 @@ export default function App() {
       >
         <CoupleNames hideSecondary={state === 'splash'} />
       </motion.div>
+
+      {/* Falling leaves — overlay above the names (z-65 > the names' z-60) but
+          below the sticky RSVP pill (z-70), so they drift in front of
+          "Joseph & Sherline" without covering the CTA. Only on the main view. */}
+      {state === 'main' && <FallingLeaves />}
     </div>
   )
 }
