@@ -7,6 +7,9 @@ export const weddingColors = {
   'sage-light': '#B2BE83',
   'photo-border': '#E4E3C3',
   'gray': '#D9D9D9',
+  'splash-bg': '#DED3C0',
+  'monogram-bg': '#F3EEE4',
+  'monogram-ink': '#615247',
   'ink': '#241000',
   'story-bg': '#909663',
 } as const

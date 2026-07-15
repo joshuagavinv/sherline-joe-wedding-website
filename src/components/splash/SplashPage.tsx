@@ -30,14 +30,14 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
 
   return (
     <motion.div
-      className="fixed inset-0 bg-wedding-warm-brown flex items-center justify-center overflow-hidden cursor-pointer select-none"
+      className="fixed inset-0 bg-wedding-splash-bg flex items-center justify-center overflow-hidden cursor-pointer select-none"
       onClick={handleTap}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
       {/* ── Cream oval — expands to fill the screen ── */}
       <motion.div
-        className="absolute bg-wedding-cream"
+        className="absolute bg-wedding-monogram-bg"
         style={{ width: 144, height: 191, borderRadius: '50%' }}
         // Explicit initial scale: on the restart path the page mounts already in
         // 'expanding', so without this Framer Motion would treat scale:8 as the
@@ -55,7 +55,7 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
       {/* ── Static halo ring — single thin cream outline hugging the oval (Figma 91:99,
            157×205, 1px #F3EEE4); fades out as expansion begins ── */}
       <motion.div
-        className="absolute pointer-events-none border border-wedding-cream"
+        className="absolute pointer-events-none border border-wedding-monogram-bg"
         style={{ width: 157, height: 205, borderRadius: '50%' }}
         animate={expanding ? { opacity: 0 } : { opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -98,7 +98,7 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
       <AnimatePresence>
         {!expanding && (
           <motion.p
-            className="absolute top-[calc(50%+115px)] font-sans text-body font-medium uppercase tracking-ui-label text-wedding-cream/50"
+            className="absolute top-[calc(50%+115px)] text-center font-sans text-body font-medium uppercase leading-[1.14] tracking-[0.48px] text-wedding-monogram-ink/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1] }}
             exit={{ opacity: 0 }}

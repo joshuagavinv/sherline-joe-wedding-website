@@ -6,12 +6,12 @@ export function MonogramOval() {
     <div className="relative flex items-center justify-center" style={{ width: 157, height: 205 }}>
       {/* Halo ring — 157×205, 1px cream outline */}
       <div
-        className="absolute inset-0 pointer-events-none border border-wedding-cream"
+        className="absolute inset-0 pointer-events-none border border-wedding-monogram-bg"
         style={{ borderRadius: '50%' }}
       />
       {/* Cream fill oval */}
       <div
-        className="absolute bg-wedding-cream"
+        className="absolute bg-wedding-monogram-bg"
         style={{ width: 144, height: 191, borderRadius: '50%' }}
       />
       {/* Monogram Lottie — larger than oval so botanicals overlap the edge */}
