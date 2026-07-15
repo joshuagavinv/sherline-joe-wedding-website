@@ -8,6 +8,7 @@ import { WeddingDay } from '@/components/sections/WeddingDay'
 import { Attire } from '@/components/sections/Attire'
 import { Hills } from '@/components/sections/Hills'
 import { Gallery } from '@/components/sections/Gallery'
+import { Farewell } from '@/components/sections/Farewell'
 import { RestartButton } from '@/components/sections/RestartButton'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 import { FallingLeaves } from '@/components/ui/FallingLeaves'
@@ -71,6 +72,7 @@ export default function App() {
             </PageShell>
             <Hills />
             <Gallery />
+            <Farewell />
             <RestartButton onRestart={handleRestart} />
           </motion.div>
         )}
