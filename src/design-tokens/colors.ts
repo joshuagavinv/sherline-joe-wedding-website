@@ -11,5 +11,6 @@ export const weddingColors = {
   'monogram-bg': '#F3EEE4',
   'monogram-ink': '#615247',
   'ink': '#241000',
-  'story-bg': '#909663',
+  'story-bg': '#8B9553', // matches the grass green baked into the plant illustration (grass.svg) so the field blends seamlessly into the section below
+  'hill-green': '#909663', // matches the front hill SVG (hills_front.svg) so the Hills section body / Registry merges seamlessly into the hill above
 } as const

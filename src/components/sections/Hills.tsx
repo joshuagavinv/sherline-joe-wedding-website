@@ -49,8 +49,8 @@ const LAYERS: Layer[] = [
   // front stems; native 1512×308 → 74.6% of frame height
   { key: 'stems-front', src: `${STEM}/hills_stems_front.svg`, range: 12,
     box: { left: 0, right: 0, bottom: 0, height: '74.6%' } },
-  // front hill is #909663 — same as the section body, so it merges seamlessly.
-  // range 0: anchored, defines the bottom edge.
+  // front hill is #909663 (wedding-hill-green) — same as the section body, so
+  // it merges seamlessly. range 0: anchored, defines the bottom edge.
   { key: 'hill-front', src: `${HILL}/hills_front.svg`, range: 0,
     box: { top: '50.75%', right: '0.07%', bottom: 0, left: 0 } },
 ]
@@ -142,7 +142,7 @@ export function Hills() {
   const containerH = `calc(${sceneH} + ${STEM_TOP_BUFFER}px)`
 
   return (
-    <section className="bg-wedding-story-bg">
+    <section className="bg-wedding-hill-green">
       {/* Hills banner — full-bleed monogram cream "sky" showing through gaps
           between ridges, the green front hill merging into the section body
           below. RSVP (Figma node 149:1458) is overlaid at the top of the

@@ -33,7 +33,7 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
       className="fixed inset-0 bg-wedding-splash-bg flex items-center justify-center overflow-hidden cursor-pointer select-none"
       onClick={handleTap}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.6, ease: 'easeInOut' }}
     >
       {/* ── Cream oval — expands to fill the screen ── */}
       <motion.div

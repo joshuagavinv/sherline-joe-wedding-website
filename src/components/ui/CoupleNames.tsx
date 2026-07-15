@@ -25,74 +25,63 @@ function YoureInvitedArc() {
 interface CoupleNamesProps {
   className?: string
   /**
-   * When provided, each element fades in individually — names first, arc + parents after.
-   * Omit (SplashPage) to render with no internal animation; parent controls the fade.
+   * When provided, each line cascades in (fade + gentle rise) as `reveal` flips
+   * true — one connected reveal shared with the date rendered in App's overlay.
+   * Omit (the InvitedBanner spacer) to render static markup for layout only.
    */
-  inView?: boolean
-  /** visibility:hidden on arc + parent lines, preserving layout (used on SplashPage). */
-  hideSecondary?: boolean
+  reveal?: boolean
 }
 
-export function CoupleNames({ className, inView, hideSecondary = false }: CoupleNamesProps) {
-  const controlled = inView !== undefined
+// Soft easeOut (≈ easeOutCubic) so each line decelerates into place — an organic
+// settle rather than a linear pop.
+const EASE = [0.22, 1, 0.36, 1] as const
 
-  const fade = (delay: number) =>
+export function CoupleNames({ className, reveal }: CoupleNamesProps) {
+  const controlled = reveal !== undefined
+
+  // Every line rises 10px and fades. Joseph / and / Sherline share one delay so
+  // the couple's names bloom TOGETHER as a unit; the arc, parent lines and date
+  // then settle around them a beat later — a natural cascade, not a flat fade.
+  // The fade (opacity) lingers a little longer than the rise for a softer bloom.
+  // Tuned to land as the oval completes (~1.8s), bridging the splash → banner
+  // hand-off. Uncontrolled (the invisible spacer) = no animation.
+  const line = (delay: number) =>
     controlled
       ? {
-          initial: { opacity: 0 },
-          animate: { opacity: inView ? 1 : 0 },
-          transition: { duration: 0.65, delay, ease: 'easeOut' as const },
+          initial: { opacity: 0, y: 10 },
+          animate: { opacity: reveal ? 1 : 0, y: reveal ? 0 : 10 },
+          transition: {
+            y: { duration: 0.8, delay, ease: EASE },
+            opacity: { duration: 1.2, delay, ease: 'easeInOut' as const },
+          },
         }
       : {}
-
-  // Uncontrolled (the shared App overlay): the primary names (Joseph / and / Sherline)
-  // stay fully visible at all times, while the secondary lines (arc + parents) fade
-  // their opacity as hideSecondary toggles — so they reveal smoothly on splash → main
-  // without ever nudging the primary names' position.
-  const secondary = (delay: number) =>
-    controlled
-      ? fade(delay)
-      : {
-          initial: { opacity: 0 },
-          animate: { opacity: hideSecondary ? 0 : 1 },
-          // Hide instantly when entering the splash (so the arc + parent lines never
-          // flicker mid-expansion); fade in gently when revealing on splash → main.
-          transition: hideSecondary
-            ? { duration: 0 }
-            : { duration: 0.6, delay, ease: 'easeOut' as const },
-        }
 
   return (
     <div className={cn('flex flex-col items-center text-center text-wedding-dark-brown', className)}>
 
-      <motion.div className={cn(controlled && hideSecondary && 'invisible')} {...secondary(0.55)}>
+      <motion.div {...line(0.8)}>
         <YoureInvitedArc />
       </motion.div>
 
-      <motion.p className="mt-1 font-serif text-display leading-none" {...fade(0.1)}>
+      <motion.p className="mt-1 font-serif text-display leading-none" {...line(0.5)}>
         Joseph
       </motion.p>
 
-      <motion.p
-        className={cn('mt-[13px] font-sans text-body font-medium leading-[1.14]', controlled && hideSecondary && 'invisible')}
-        {...secondary(0.7)}
-      >
-        Son of Tjan Soen Eng <br/> and Mirjam Nugraha
+      <motion.p className="mt-[13px] font-sans text-body font-medium leading-[1.14]" {...line(0.88)}>
+        Son of Tjan Soen Eng <br /> and Mirjam Nugraha
       </motion.p>
 
-      <motion.p className="mt-[18px] font-serif text-connector text-wedding-dark-brown" {...fade(0.2)}>
+      <motion.p className="mt-[18px] font-serif text-connector text-wedding-dark-brown" {...line(0.5)}>
         and
       </motion.p>
 
-      <motion.p className="mt-[15px] font-serif text-display leading-none" {...fade(0.15)}>
+      <motion.p className="mt-[15px] font-serif text-display leading-none" {...line(0.5)}>
         Sherline
       </motion.p>
 
-      <motion.p
-        className={cn('mt-1 font-sans text-body font-medium leading-[1.14]', controlled && hideSecondary && 'invisible')}
-        {...secondary(0.8)}
-      >
-        Daughter of Alouisius Maseimilian <br/> and Venny Martadinata
+      <motion.p className="mt-1 font-sans text-body font-medium leading-[1.14]" {...line(0.94)}>
+        Daughter of Alouisius Maseimilian <br /> and Venny Martadinata
       </motion.p>
 
     </div>

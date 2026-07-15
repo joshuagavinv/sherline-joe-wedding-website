@@ -60,7 +60,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <PageShell>
               <InvitedBanner />
@@ -78,23 +78,34 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* ── Couple names — a SINGLE element mounted once, shared across splash → main.
-           Fades in during the oval expansion and stays put; because it never remounts,
-           "Joseph & Sherline" cannot shift on the transition. Positioned with
-           `absolute top-[14vh]` to match InvitedBanner's in-flow layout, so it scrolls
-           away naturally with the page once you're on the main view. ── */}
-      <motion.div
+      {/* ── Hero text — names, "You're invited" arc, parent lines AND the date,
+           mounted once as a SINGLE shared overlay across splash → main. Each line
+           cascades in (fade + gentle rise) in a natural order as `showNames` flips,
+           so the block blooms as one connected, organic reveal that bridges the
+           oval expansion and the banner — not a flat simultaneous fade. Because it
+           never remounts across the transition, the text can't shift. Positioned
+           `absolute top-[14vh]` to match InvitedBanner's invisible spacer, so it
+           scrolls away naturally with the page once you're on the main view.
+           `key={namesKey}` remounts the block on restart so the cascade replays. ── */}
+      <div
         key={namesKey}
         className="absolute inset-x-0 top-[14vh] z-[60] flex flex-col items-center pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: showNames ? 1 : 0 }}
-        // Slow fade-in (delay 0.5 / duration 1.5), shared by both paths: the
-        // first-visit tap flips showNames false → true; restart bumps namesKey to
-        // remount this overlay so it re-runs initial 0 → animate 1 deterministically.
-        transition={{ delay: showNames ? 0.5 : 0, duration: 1.5 }}
       >
-        <CoupleNames hideSecondary={state === 'splash'} />
-      </motion.div>
+        <CoupleNames reveal={showNames} />
+        <motion.p
+          className="mt-[47px] font-garamond text-subhead font-medium text-wedding-dark-brown"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: showNames ? 1 : 0, y: showNames ? 0 : 10 }}
+          // Tail of the cascade — the date settles just after the parent lines.
+          // Opacity lingers a little longer than the rise, matching CoupleNames.
+          transition={{
+            y: { duration: 0.8, delay: showNames ? 1.02 : 0, ease: [0.22, 1, 0.36, 1] as const },
+            opacity: { duration: 1.2, delay: showNames ? 1.02 : 0, ease: 'easeInOut' as const },
+          }}
+        >
+          on Friday, 18 December 2026
+        </motion.p>
+      </div>
 
       {/* Falling leaves — overlay above the names (z-65 > the names' z-60) but
           below the sticky RSVP pill (z-70), so they drift in front of
