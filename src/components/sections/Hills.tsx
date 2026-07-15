@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { assetUrl, cn } from '@/lib/utils'
 
@@ -55,24 +55,38 @@ const LAYERS: Layer[] = [
     box: { top: '50.75%', right: '0.07%', bottom: 0, left: 0 } },
 ]
 
-// Registry copy (Figma node 146:1491) — placeholder gift-option details until
-// real wishing-well / cash-fund particulars are supplied.
+// Registry copy (Figma node 149:1461) — wishing-well / cash-fund particulars.
 const REGISTRY_ITEMS = [
   {
     title: 'Wishing well',
-    body: "Your presence is the greatest gift to us, and we're really looking forward to celebrating with you. However, if you wish to bless us with a gift, we kindly offer the following options.",
+    body: 'A wishing well will be available at the reception should you prefer to gift in person.',
   },
   {
     title: 'Cash fund',
-    body: "Your presence is the greatest gift to us, and we're really looking forward to celebrating with you. However, if you wish to bless us with a gift, we kindly offer the following options.",
+    body: (
+      <>
+        <p>If you prefer, you may also gift via bank transfer using our shared account below:</p>
+        <p aria-hidden="true">&nbsp;</p>
+        <p>
+          <span className="font-semibold">Account Name:</span> Vincentius Joseph Tjan and Sherline
+          Angelica Maseimilian
+        </p>
+        <p>
+          <span className="font-semibold">BSB:</span> 062-028
+        </p>
+        <p>
+          <span className="font-semibold">Account Number:</span> 12327274
+        </p>
+      </>
+    ),
   },
 ] as const
 
-function RegistryItem({ title, children }: { title: string; children: string }) {
+function RegistryItem({ title, children }: { title: string; children: ReactNode }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="w-full flex flex-col gap-[9px] border-b border-wedding-cream/50 pb-4">
+    <div className="w-full flex flex-col border-b border-wedding-cream/48 pb-4">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -91,7 +105,7 @@ function RegistryItem({ title, children }: { title: string; children: string }) 
         style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden">
-          <p className="font-sans text-body text-wedding-cream tracking-[-0.24px]">{children}</p>
+          <div className="pt-[9px] font-sans text-body text-wedding-cream tracking-[-0.24px]">{children}</div>
         </div>
       </div>
     </div>
