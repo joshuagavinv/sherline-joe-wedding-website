@@ -56,7 +56,7 @@ export default function App() {
         ) : (
           <motion.div
             key="main"
-            className="min-h-screen w-full overflow-x-clip bg-wedding-cream"
+            className="min-h-screen w-full overflow-x-clip bg-wedding-monogram-bg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0 } }}

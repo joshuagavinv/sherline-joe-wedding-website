@@ -8,7 +8,7 @@ interface RestartButtonProps {
 export function RestartButton({ onRestart }: RestartButtonProps) {
   return (
     <motion.section
-      className="w-full min-h-screen bg-wedding-warm-brown flex flex-col items-center justify-center py-24 select-none"
+      className="w-full min-h-screen bg-wedding-splash-bg flex flex-col items-center justify-center py-24 select-none"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -22,7 +22,7 @@ export function RestartButton({ onRestart }: RestartButtonProps) {
         <MonogramOval />
 
         <motion.span
-          className="font-sans text-body font-medium uppercase tracking-ui-label text-wedding-cream/50"
+          className="font-sans text-body font-medium uppercase tracking-ui-label text-wedding-monogram-ink/50"
           animate={{ opacity: [0.35, 1, 0.35] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
         >

@@ -43,7 +43,7 @@ export function InvitedBanner() {
   return (
     <section
       ref={ref}
-      className="relative bg-wedding-cream min-h-screen flex flex-col items-center px-8 text-center text-wedding-dark-brown"
+      className="relative bg-wedding-monogram-bg min-h-screen flex flex-col items-center px-8 text-center text-wedding-dark-brown"
     >
       {/* Text content — shifted up from center, sits above the plant */}
       <div className="relative z-10 pt-[14vh] pb-12 w-full">

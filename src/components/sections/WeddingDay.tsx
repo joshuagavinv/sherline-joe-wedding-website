@@ -36,7 +36,7 @@ const events = [
 
 export function WeddingDay() {
   return (
-    <section className="bg-wedding-cream px-8 py-16 text-center">
+    <section className="bg-wedding-monogram-bg px-8 py-16 text-center">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

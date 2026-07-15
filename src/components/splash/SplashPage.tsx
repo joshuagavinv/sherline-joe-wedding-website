@@ -61,7 +61,9 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
         transition={{ duration: 0.3 }}
       />
 
-      {/* ── Two white oval rings — ripple outward on tap ── */}
+      {/* ── Two cream oval rings — ripple outward on tap (monogram-bg, matching the
+           halo ring and oval fill, so the ripple stays in the warm cream tone
+           instead of a stark white) ── */}
       <AnimatePresence>
         {expanding && [
           { strokeWidth: 1, delay: 0 },
@@ -69,8 +71,8 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
         ].map(({ strokeWidth, delay }, i) => (
           <motion.div
             key={i}
-            className="absolute pointer-events-none"
-            style={{ width: 144, height: 191, borderRadius: '50%', border: `${strokeWidth}px solid white` }}
+            className="absolute pointer-events-none border-wedding-monogram-bg"
+            style={{ width: 144, height: 191, borderRadius: '50%', borderStyle: 'solid', borderWidth: strokeWidth }}
             initial={{ scale: 1, opacity: 0.85 }}
             animate={{ scale: 4, opacity: 0 }}
             transition={{
