@@ -52,6 +52,10 @@ export function InvitedBanner() {
             sits correctly. The visible names are the shared overlay rendered in App,
             positioned to land exactly here, so they never shift on the transition. */}
         <CoupleNames className="invisible" />
+
+        <p className="mt-[47px] font-garamond text-subhead font-medium text-wedding-dark-brown">
+          on Friday, 18 December 2026
+        </p>
       </div>
 
       {/* Plant illustration — static flower field + animated stems. Outer div

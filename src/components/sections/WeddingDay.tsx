@@ -44,9 +44,6 @@ export function WeddingDay() {
         transition={{ duration: 0.6 }}
       >
         <WeddingDayArc />
-        <p className="mt-4 font-garamond text-subhead font-medium text-wedding-dark-brown">
-          Friday, December 18th 2026
-        </p>
       </motion.div>
 
       <div className="mt-16 flex flex-col gap-[72px]">
