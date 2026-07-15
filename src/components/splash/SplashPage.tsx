@@ -102,9 +102,11 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
           <motion.p
             className="absolute top-[calc(50%+115px)] text-center font-sans text-body font-medium uppercase leading-[1.14] tracking-[0.48px] text-wedding-monogram-ink/50"
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1] }}
-            exit={{ opacity: 0 }}
-            transition={{ delay: 0.9, duration: 1.4, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
+            animate={{
+              opacity: [0, 1],
+              transition: { delay: 0.9, duration: 1.4, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+            }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
           >
             Tap to start
           </motion.p>

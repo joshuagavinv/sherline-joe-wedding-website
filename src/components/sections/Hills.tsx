@@ -28,7 +28,10 @@ const STEM = assetUrl('/assets/Hills/hills_stems_smil')
 
 // Native hills-frame aspect ratio (Figma frame 91:157 = 1512 × 412.895).
 const SCENE_RATIO = 412.895 / 1512 // ≈ 0.2731 (height ÷ width)
-const MIN_SCENE_H = 180 // px — floor for narrow screens (scene crops to centre)
+// Floor for narrow screens = the native frame height, so mobile viewports show
+// the full illustration (tall back stems included) cropped only left/right,
+// never squashed down (Figma node 155:3630 — "hillss section").
+const MIN_SCENE_H = 413
 
 const LAYERS: Layer[] = [
   // back stems sit behind everything; native 1512×431 → 104.4% of frame height
@@ -126,11 +129,15 @@ export function Hills() {
 
   return (
     <section className="bg-wedding-story-bg">
-      {/* Hills banner — full-bleed, cream "sky" showing through gaps between
-          ridges, the green front hill merging into the section body below. */}
+      {/* Hills banner — full-bleed monogram cream "sky" showing through gaps
+          between ridges, the green front hill merging into the section body
+          below. RSVP (Figma node 149:1458) is overlaid at the top of the
+          scene, framed by the tall back stems either side (Figma node
+          155:3630 — "hillss section"), rather than sitting in its own block
+          above it. */}
       <div
         ref={bannerRef}
-        className="relative w-full overflow-hidden bg-wedding-cream"
+        className="relative w-full overflow-hidden bg-wedding-monogram-bg"
         style={{ height: containerH }}
       >
         {/* Stage keeps the native aspect ratio: width derives from height. */}
@@ -147,12 +154,23 @@ export function Hills() {
               <img src={layer.src} alt="" aria-hidden="true" className="block w-full h-full" />
             </motion.div>
           ))}
+
+          <div
+            id="rsvp"
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[225px] flex flex-col items-center gap-2 text-center text-wedding-monogram-ink"
+            style={{ zIndex: LAYERS.length + 1 }}
+          >
+            <h2 className="font-serif text-heading uppercase">RSVP</h2>
+            <p className="font-sans text-body font-medium tracking-[-0.24px]">
+              Please RSVP via WhatsApp through our guest management partner, Pentamoo.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Content: Registry (Figma node 146:1491) */}
       <motion.div
-        className="w-full max-w-canvas mx-auto px-8 pt-12 pb-20 flex flex-col gap-6 text-wedding-cream"
+        className="w-full max-w-canvas mx-auto px-8 pb-20 flex flex-col gap-6 text-wedding-cream"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '0px 0px -80px 0px' }}

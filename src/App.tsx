@@ -6,7 +6,6 @@ import { InvitedBanner } from '@/components/sections/InvitedBanner'
 import { OurStory } from '@/components/sections/OurStory'
 import { WeddingDay } from '@/components/sections/WeddingDay'
 import { Attire } from '@/components/sections/Attire'
-import { RSVPSection } from '@/components/sections/RSVPSection'
 import { Hills } from '@/components/sections/Hills'
 import { Gallery } from '@/components/sections/Gallery'
 import { RestartButton } from '@/components/sections/RestartButton'
@@ -69,9 +68,6 @@ export default function App() {
             <PageShell>
               <WeddingDay />
               <Attire />
-            </PageShell>
-            <PageShell>
-              <RSVPSection />
             </PageShell>
             <Hills />
             <Gallery />
