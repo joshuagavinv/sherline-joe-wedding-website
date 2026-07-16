@@ -191,6 +191,7 @@ export function Attire() {
                     width: look.width,
                     bottom: PLATFORM_HEIGHT - SINK,
                     display: 'block',
+                    zIndex: 1,
                   }}
                 />
                 <img

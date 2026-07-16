@@ -17,10 +17,15 @@ const FLOWER_FIELD_TOP_INSET = 87
 // Reserving exactly this tucks the flowers right under the gap, with no tall
 // empty strip above them (= 412px).
 const PLANT_RESERVE = PLANT_FIELD_HEIGHT - PLANT_BOTTOM_BLEED - FLOWER_FIELD_TOP_INSET
-// Fixed daylight between the date and the top of the flower field, held constant
-// on every screen. Comfortably clears the max parallax rise (plane 5 ≈ 43px) so
-// the tallest buds never touch the text, at rest or mid scroll-out.
-const TEXT_PLANT_GAP = 72
+// Offset from the date line to the top of the flower field, applied as the
+// reserve block's margin (so a negative value works too). Rule of thumb: the
+// tallest stem's tip sits LEVEL with the date — i.e. the field is pulled up
+// until its top (FLOWER_FIELD_TOP_INSET) lands at the date's vertical centre, a
+// touch above the date's bottom edge (the line box is ≈24px tall). Screen-
+// independent: this offset equals stemTip − dateBottom on every viewport. It's
+// negative, so the tall SIDE stems rise into the date's band — but they clear
+// the centred date/parentage text horizontally, so nothing overlaps the text.
+const TEXT_PLANT_GAP = -12
 
 // Plant field layers, back → front. The static flower/grass/pulp fields are SVG
 // (cut from the original plants-bg, now each its own full-frame 1512×540 layer)
@@ -104,18 +109,18 @@ export function InvitedBanner() {
         </p>
       </div>
 
-      {/* Fixed separation between the text and the flower field. The section is
-          sized to its content (no min-h-screen), so its bottom edge lands right
-          at the flower base — the grass then meets OurStory's matching green.
-          This spacer holds a constant gap on every screen; paired with the plant
-          footprint below, the flowers and text can never touch — at rest or
-          mid-parallax — on any viewport. */}
-      <div className="w-full shrink-0" style={{ height: TEXT_PLANT_GAP }} aria-hidden />
-
-      {/* In-flow footprint reserving the plant's visible height so the flex
-          column accounts for it. The actual illustration is the absolutely
-          positioned, full-bleed layer below, which overlays exactly here. */}
-      <div className="w-full shrink-0" style={{ height: PLANT_RESERVE }} aria-hidden />
+      {/* In-flow footprint reserving the plant's visible flower band so the flex
+          column accounts for it, sizing the section to its content (no
+          min-h-screen) — its bottom edge lands at the flower base, where the
+          grass meets OurStory's matching green. TEXT_PLANT_GAP (a margin, here
+          negative) seats the top stem level with the date on every screen. The
+          actual illustration is the absolutely positioned, full-bleed layer
+          below, which overlays exactly here. */}
+      <div
+        className="w-full shrink-0"
+        style={{ height: PLANT_RESERVE, marginTop: TEXT_PLANT_GAP }}
+        aria-hidden
+      />
 
       {/* Plant illustration — flower field + animated stems, grouped into
           parallax depth planes. Outer div is the fixed footprint; inner div is

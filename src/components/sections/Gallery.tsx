@@ -7,13 +7,6 @@ import { assetUrl } from '@/lib/utils'
 // several are off-center focal points, not a plain centered object-cover
 // Speeds vary dramatically per layer for Apple-style depth parallax
 const PHOTOS = [
-  // top-right: couple on the street — fast (foreground feel)
-  {
-    src: assetUrl('/assets/Gallery/gallery-2.jpg'), alt: 'Joseph and Sherline',
-    top: 0, left: 250, width: 153, height: 171,
-    innerTop: -14, innerLeft: -72, innerWidth: 299, innerHeight: 199,
-    speed: 80,
-  },
   // left: holding hands — medium-fast
   {
     src: assetUrl('/assets/Gallery/gallery-4.jpg'), alt: 'Joseph and Sherline holding hands',
@@ -21,19 +14,33 @@ const PHOTOS = [
     innerTop: 0, innerLeft: -75, innerWidth: 265, innerHeight: 176,
     speed: 55,
   },
-  // bottom-left: leaning against the wall — fastest (foreground pop)
-  {
-    src: assetUrl('/assets/Gallery/gallery-3.jpg'), alt: 'Joseph and Sherline',
-    top: 728, left: 0, width: 228, height: 171,
-    innerTop: -115, innerLeft: -124, innerWidth: 451, innerHeight: 300,
-    speed: 90,
-  },
   // bottom-right: Joseph portrait — medium
   {
     src: assetUrl('/assets/Gallery/gallery-5.jpg'), alt: 'Joseph',
     top: 841, left: 217, width: 134, height: 176,
     innerTop: -79, innerLeft: -50, innerWidth: 252, innerHeight: 378,
     speed: 40,
+  },
+] as const
+
+// Edge-anchored photos: these live in the full-width section layer (NOT the centred
+// 402px canvas) so they kiss the true left/right screen edge on phones wider than the
+// design canvas. `top` is section-relative = section paddingTop (120) + the original
+// canvas top, since absolute children sit at the padding-box origin.
+const EDGE_PHOTOS = [
+  // top-right: couple on the street — flush to the RIGHT screen edge — fast (foreground feel)
+  {
+    src: assetUrl('/assets/Gallery/gallery-2.jpg'), alt: 'Joseph and Sherline',
+    top: 120, right: 0, width: 153, height: 171,
+    innerTop: -14, innerLeft: -72, innerWidth: 299, innerHeight: 199,
+    speed: 80,
+  },
+  // bottom-left: leaning against the wall — flush to the LEFT screen edge — fastest (foreground pop)
+  {
+    src: assetUrl('/assets/Gallery/gallery-3.jpg'), alt: 'Joseph and Sherline',
+    top: 848, left: 0, width: 228, height: 171,
+    innerTop: -115, innerLeft: -124, innerWidth: 451, innerHeight: 300,
+    speed: 90,
   },
 ] as const
 
@@ -59,7 +66,7 @@ const MAIN_SLIDES = [
   },
 ] as const
 
-const SLIDE_INTERVAL_MS = 3200
+const SLIDE_INTERVAL_MS = 5000
 const SLIDE_TRANSITION = { duration: 0.8, ease: 'easeInOut' } as const
 
 function MainPhotoSlideshow() {
@@ -81,7 +88,6 @@ function MainPhotoSlideshow() {
   }, [isInView])
 
   const slide = MAIN_SLIDES[index]
-  const W = MAIN_PHOTO.width
 
   return (
     <motion.div
@@ -93,9 +99,9 @@ function MainPhotoSlideshow() {
         <motion.div
           key={slide.src}
           className="absolute inset-0 overflow-hidden"
-          initial={{ x: -W }}
-          animate={{ x: 0 }}
-          exit={{ x: W }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={SLIDE_TRANSITION}
         >
           <img
@@ -111,10 +117,10 @@ function MainPhotoSlideshow() {
 }
 
 function ParallaxPhoto({
-  src, alt, top, left, width, height, innerTop, innerLeft, innerWidth, innerHeight, speed,
+  src, alt, top, left, right, width, height, innerTop, innerLeft, innerWidth, innerHeight, speed,
 }: {
   src: string; alt: string
-  top: number; left: number; width: number; height: number
+  top: number; left?: number; right?: number; width: number; height: number
   innerTop: number; innerLeft: number; innerWidth: number; innerHeight: number
   speed: number
 }) {
@@ -123,7 +129,7 @@ function ParallaxPhoto({
   const y = useTransform(scrollYProgress, [0, 1], [speed, -speed])
 
   return (
-    <motion.div ref={ref} className="absolute overflow-hidden" style={{ top, left, width, height, y }}>
+    <motion.div ref={ref} className="absolute overflow-hidden" style={{ top, left, right, width, height, y }}>
       <img
         src={src}
         alt={alt}
@@ -149,6 +155,11 @@ export function Gallery() {
         paddingBottom: 64,
       }}
     >
+      {/* Edge-anchored photos sit in the full-width section layer so they touch the true
+          screen edge on any mobile width (rendered first → the centred canvas paints on top) */}
+      {EDGE_PHOTOS.map((photo) => (
+        <ParallaxPhoto key={photo.src} {...photo} />
+      ))}
       {/* Scattered photo canvas, centred to 402px design width */}
       <div className="relative mx-auto" style={{ width: 402, height: SCENE_H }}>
         {PHOTOS.map((photo) => (

@@ -37,6 +37,9 @@ export function OurStory() {
   const [covered, setCovered] = useState(true)
   const [topIdx, setTopIdx] = useState(0)
   const [generation, setGeneration] = useState(0)
+  // True while the front card is flying away — guards against a second tap landing
+  // mid-flight and desyncing the stack. Cleared when the exit finishes.
+  const [advancing, setAdvancing] = useState(false)
 
   const remaining = photos.length - topIdx
   const stackPhotos = photos
@@ -46,7 +49,11 @@ export function OurStory() {
   function handleTap() {
     if (covered) {
       setCovered(false)
+    } else if (advancing) {
+      // Ignore taps while a card is still leaving.
+      return
     } else if (topIdx < photos.length) {
+      setAdvancing(true)
       setTopIdx(i => i + 1)
     } else {
       setTopIdx(0)
@@ -68,21 +75,28 @@ export function OurStory() {
           animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
-          <AnimatePresence initial={false}>
+          <AnimatePresence initial={false} onExitComplete={() => setAdvancing(false)}>
             {/* Fanned photo stack — the real photos, visible behind the star
                 cover and after it lifts (Figma node 149:1613). */}
             {stackPhotos.map(photo => {
               const rot = ROT[photo.index] ?? 0
               const crop = CROP[photo.index] ?? { sx: 100, sy: 100, x: 50, y: 50 }
+              // Cards further back sit a little lower so the whole stack peeks —
+              // you always see a glimpse of the photos behind the front one.
+              const depth = photo.stackPos
               return (
                 <motion.div
                   key={`${generation}-${photo.index}`}
                   className="absolute inset-0 flex items-center justify-center"
                   style={{ zIndex: photos.length - photo.stackPos }}
                   initial={false}
-                  animate={{ opacity: 1, rotate: rot, scale: 1 }}
+                  // The whole stack stays visible the entire time — nothing vanishes.
+                  // When the front card flies off, the cards behind hold their place
+                  // and then step forward one notch (via the transition delay), so the
+                  // leaving photo clears before the next settles into the front spot.
+                  animate={{ opacity: 1, rotate: rot, y: depth * 7 }}
                   exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
-                  transition={{ duration: 0.4, ease: [0.34, 1.2, 0.64, 1] }}
+                  transition={{ duration: 0.45, ease: [0.34, 1.2, 0.64, 1], delay: 0.32 }}
                 >
                   <div style={{ width: CARD_W, height: CARD_H }}>
                     {/* Outer owns the frame border; inner owns the overflow clip
