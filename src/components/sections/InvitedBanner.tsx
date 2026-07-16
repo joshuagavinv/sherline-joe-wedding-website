@@ -7,6 +7,20 @@ import { assetUrl } from '@/lib/utils'
 const STEM_BASE = '/assets/Landing/02%20Stems/landing%20stems%20json/'
 const PLANT_BASE = '/assets/Landing/plants/'
 const PLANT_FIELD_HEIGHT = 539 // px, native height of the full-frame plant layers
+const PLANT_BOTTOM_BLEED = 40 // px the field hangs below the section's bottom edge
+// Empty top margin above the tallest bud inside the composited flower layers
+// (measured against the rendered frame): the frame's top ~87px is transparent,
+// so the visible field starts this far down. We reserve only the band below it.
+const FLOWER_FIELD_TOP_INSET = 87
+// In-flow footprint of the VISIBLE flower band above the section's bottom edge:
+// frame height − the part that bleeds below the section − the empty top margin.
+// Reserving exactly this tucks the flowers right under the gap, with no tall
+// empty strip above them (= 412px).
+const PLANT_RESERVE = PLANT_FIELD_HEIGHT - PLANT_BOTTOM_BLEED - FLOWER_FIELD_TOP_INSET
+// Fixed daylight between the date and the top of the flower field, held constant
+// on every screen. Comfortably clears the max parallax rise (plane 5 ≈ 43px) so
+// the tallest buds never touch the text, at rest or mid scroll-out.
+const TEXT_PLANT_GAP = 72
 
 // Plant field layers, back → front. The static flower/grass/pulp fields are SVG
 // (cut from the original plants-bg, now each its own full-frame 1512×540 layer)
@@ -74,10 +88,10 @@ export function InvitedBanner() {
   return (
     <section
       ref={ref}
-      className="relative bg-wedding-monogram-bg min-h-screen flex flex-col items-center px-8 text-center text-wedding-dark-brown"
+      className="relative bg-wedding-monogram-bg flex flex-col items-center px-8 text-center text-wedding-dark-brown"
     >
-      {/* Text content — shifted up from center, sits above the plant */}
-      <div className="relative z-10 pt-[14vh] pb-12 w-full">
+      {/* Text content — pinned near the top, sits above the plant */}
+      <div className="relative z-10 pt-[14vh] w-full shrink-0">
 
         {/* Invisible layout spacers — reserve the footprint of the hero text
             (names + date) so the section keeps its height and scroll position.
@@ -90,6 +104,19 @@ export function InvitedBanner() {
         </p>
       </div>
 
+      {/* Fixed separation between the text and the flower field. The section is
+          sized to its content (no min-h-screen), so its bottom edge lands right
+          at the flower base — the grass then meets OurStory's matching green.
+          This spacer holds a constant gap on every screen; paired with the plant
+          footprint below, the flowers and text can never touch — at rest or
+          mid-parallax — on any viewport. */}
+      <div className="w-full shrink-0" style={{ height: TEXT_PLANT_GAP }} aria-hidden />
+
+      {/* In-flow footprint reserving the plant's visible height so the flex
+          column accounts for it. The actual illustration is the absolutely
+          positioned, full-bleed layer below, which overlays exactly here. */}
+      <div className="w-full shrink-0" style={{ height: PLANT_RESERVE }} aria-hidden />
+
       {/* Plant illustration — flower field + animated stems, grouped into
           parallax depth planes. Outer div is the fixed footprint; inner div is
           the one-time entrance fade/slide; each stem then carries its plane's
@@ -98,7 +125,7 @@ export function InvitedBanner() {
           sit in front of the names.) */}
       <div
         className="absolute pointer-events-none overflow-hidden"
-        style={{ left: '50%', transform: 'translateX(-50%)', width: 1512, height: PLANT_FIELD_HEIGHT, bottom: -40 }}
+        style={{ left: '50%', transform: 'translateX(-50%)', width: 1512, height: PLANT_FIELD_HEIGHT, bottom: -PLANT_BOTTOM_BLEED }}
       >
         <motion.div
           className="absolute inset-0"
