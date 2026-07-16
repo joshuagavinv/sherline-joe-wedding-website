@@ -20,6 +20,17 @@ const STACK_H = 282
 const ROT = [9.29, 2.54, -5.88, 0.76]
 const COVER_ROT = 2.5
 
+// Per-photo crop matching the Figma reveal states (nodes 149:1631–1652). Figma
+// places each image in a fixed box inside the 154×188 frame with object-fit: fill,
+// so we reproduce it as a background image with independent horizontal/vertical
+// background-size (sx/sy, % of frame) and background-position (x/y, %).
+const CROP = [
+  { sx: 107, sy: 117, x: 50, y: 50 }, // raised hand (4c0b793b)
+  { sx: 160, sy: 138, x: 44, y: 55 }, // striped hat (IMG_0613)
+  { sx: 244, sy: 150, x: 35, y: 87 }, // couple + flowers (IMG_7771)
+  { sx: 108, sy: 118, x: 60, y: 55 }, // selfie (IMG_7668)
+]
+
 export function OurStory() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -80px 0px' })
@@ -58,32 +69,70 @@ export function OurStory() {
           transition={{ duration: 0.7, delay: 0.1 }}
         >
           <AnimatePresence initial={false}>
-            {/* Ghost polaroids fanned behind the cover — hint at the stack */}
-            {covered && (
-              <motion.div
-                key="cover-ghosts"
-                className="absolute inset-0"
-                style={{ zIndex: 27 }}
-                exit={{ opacity: 0, transition: { duration: 0.25 } }}
-              >
-                {[ROT[0], ROT[2]].map((r, i) => (
-                  <div key={i} className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className="border-photo border-wedding-photo-border bg-wedding-photo-border"
-                      style={{ width: CARD_W, height: CARD_H, rotate: `${r}deg` }}
-                    />
+            {/* Fanned photo stack — the real photos, visible behind the star
+                cover and after it lifts (Figma node 149:1613). */}
+            {stackPhotos.map(photo => {
+              const rot = ROT[photo.index] ?? 0
+              const crop = CROP[photo.index] ?? { sx: 100, sy: 100, x: 50, y: 50 }
+              return (
+                <motion.div
+                  key={`${generation}-${photo.index}`}
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{ zIndex: photos.length - photo.stackPos }}
+                  initial={false}
+                  animate={{ opacity: 1, rotate: rot, scale: 1 }}
+                  exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
+                  transition={{ duration: 0.4, ease: [0.34, 1.2, 0.64, 1] }}
+                >
+                  <div style={{ width: CARD_W, height: CARD_H }}>
+                    {/* Outer owns the frame border; inner owns the overflow clip
+                        (border-photo written directly — routing it through cn()
+                        drops the width utility). See PhotoFrame gotcha in CLAUDE.md. */}
+                    <div className="border-photo border-wedding-photo-border bg-wedding-photo-border w-full h-full">
+                      {/* Crop tuned to the Figma reveal state (nodes 149:1631–1652). */}
+                      <div
+                        role="img"
+                        aria-label={photo.alt}
+                        className="w-full h-full bg-no-repeat grayscale"
+                        style={{
+                          backgroundImage: `url(${photo.src})`,
+                          backgroundSize: `${crop.sx}% ${crop.sy}%`,
+                          backgroundPosition: `${crop.x}% ${crop.y}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                ))}
+                </motion.div>
+              )
+            })}
+
+            {/* Replay hint once every photo has been tapped through */}
+            {!covered && remaining === 0 && (
+              <motion.div
+                key="done"
+                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.22 } }}
+                transition={{ delay: 0.3, duration: 0.3 }}
+              >
+                <motion.span
+                  className="font-sans text-caption text-wedding-cream/40 uppercase tracking-ui-label"
+                  animate={{ opacity: [0.3, 0.9, 0.3] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                >
+                  Tap to replay
+                </motion.span>
               </motion.div>
             )}
 
-            {/* Cover card — starfish illustration */}
+            {/* Star cover card — sits on top of the fanned stack until tapped */}
             {covered && (
               <motion.div
                 key="cover"
                 className="absolute inset-0 flex items-center justify-center"
                 style={{ zIndex: 30 }}
-                initial={{ opacity: 0, y: 24, rotate: COVER_ROT, scale: 0.9 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0, rotate: COVER_ROT, scale: 1 }}
                 transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
                 exit={{ y: -440, rotate: COVER_ROT - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
@@ -106,58 +155,6 @@ export function OurStory() {
                   </motion.span>
                 </div>
               </motion.div>
-            )}
-
-            {/* Photo polaroids — revealed after the cover is dismissed */}
-            {!covered && (
-              remaining > 0 ? (
-                stackPhotos.map(photo => {
-                  const rot = ROT[photo.index] ?? 0
-                  return (
-                    <motion.div
-                      key={`${generation}-${photo.index}`}
-                      className="absolute inset-0 flex items-center justify-center"
-                      style={{ zIndex: photos.length - photo.stackPos }}
-                      initial={{ opacity: 0.5, rotate: rot, scale: 0.96 }}
-                      animate={{ opacity: 1, rotate: rot, scale: 1 }}
-                      exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
-                      transition={{ duration: 0.4, ease: [0.34, 1.2, 0.64, 1], delay: photo.stackPos * 0.05 }}
-                    >
-                      <div style={{ width: CARD_W, height: CARD_H }}>
-                        {/* Outer owns the frame border; inner owns the overflow clip
-                            (border-photo written directly — routing it through cn()
-                            drops the width utility). See PhotoFrame gotcha in CLAUDE.md. */}
-                        <div className="border-photo border-wedding-photo-border bg-wedding-photo-border w-full h-full">
-                          <div className="overflow-hidden w-full h-full">
-                            <img
-                              src={photo.src}
-                              alt={photo.alt}
-                              className="w-full h-full object-cover grayscale"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
-                })
-              ) : (
-                <motion.div
-                  key="done"
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.22 } }}
-                  transition={{ delay: 0.3, duration: 0.3 }}
-                >
-                  <motion.span
-                    className="font-sans text-caption text-wedding-cream/40 uppercase tracking-ui-label"
-                    animate={{ opacity: [0.3, 0.9, 0.3] }}
-                    transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-                  >
-                    Tap to replay
-                  </motion.span>
-                </motion.div>
-              )
             )}
           </AnimatePresence>
 
