@@ -88,15 +88,28 @@ export function OurStory() {
                 <motion.div
                   key={`${generation}-${photo.index}`}
                   className="absolute inset-0 flex items-center justify-center"
-                  style={{ zIndex: photos.length - photo.stackPos }}
+                  // z-index is keyed to the ABSOLUTE photo index, not stackPos, so it
+                  // never changes for a card's lifetime. Photos leave front-first
+                  // (0→1→2→3), so a lower index is always higher in the stack — the
+                  // departing card stays above everything behind it the whole flight.
+                  // (Using stackPos re-tied the promoted card to the leaver's z-index,
+                  // making it pop in front mid-flight.)
+                  style={{ zIndex: photos.length - photo.index }}
                   initial={false}
                   // The whole stack stays visible the entire time — nothing vanishes.
                   // When the front card flies off, the cards behind hold their place
                   // and then step forward one notch (via the transition delay), so the
                   // leaving photo clears before the next settles into the front spot.
                   animate={{ opacity: 1, rotate: rot, y: depth * 7 }}
-                  exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
-                  transition={{ duration: 0.45, ease: [0.34, 1.2, 0.64, 1], delay: 0.32 }}
+                  // Slide accelerates (easeIn); opacity fades linearly across the full
+                  // (lengthened) flight, so the card lingers visible and melts away
+                  // gradually as it lifts instead of popping out at the top.
+                  exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.55, ease: 'easeIn', opacity: { duration: 0.55, ease: 'linear' } } }}
+                  // delay (0.58) outlasts the longer exit (0.55) so the front card
+                  // flies fully clear of a still stack — with a beat of empty space —
+                  // before the fan steps forward, the same calm the cover lifts off.
+                  // Overshoot (1.4) matches the cover.
+                  transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1], delay: 0.58 }}
                 >
                   <div style={{ width: CARD_W, height: CARD_H }}>
                     {/* Outer owns the frame border; inner owns the overflow clip
@@ -149,7 +162,7 @@ export function OurStory() {
                 initial={false}
                 animate={{ opacity: 1, y: 0, rotate: COVER_ROT, scale: 1 }}
                 transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
-                exit={{ y: -440, rotate: COVER_ROT - 14, opacity: 0, transition: { duration: 0.42, ease: 'easeIn' } }}
+                exit={{ y: -440, rotate: COVER_ROT - 14, opacity: 0, transition: { duration: 0.55, ease: 'easeIn', opacity: { duration: 0.55, ease: 'linear' } } }}
               >
                 <div
                   className="border-photo border-wedding-photo-border bg-wedding-monogram-bg overflow-hidden flex flex-col items-center justify-center gap-3"
