@@ -24,25 +24,46 @@ const PHOTOS = [
 ] as const
 
 // Edge-anchored photos: these live in the full-width section layer (NOT the centred
-// 402px canvas) so they kiss the true left/right screen edge on phones wider than the
-// design canvas. `top` is section-relative = section paddingTop (120) + the original
-// canvas top, since absolute children sit at the padding-box origin.
+// 402px canvas). On mobile they kiss the true left/right screen edge (inset 0); on
+// larger screens they tuck back to the 402px container edge (see EDGE_DESKTOP_INSET)
+// so they stay attached to the centred column instead of flying to the monitor edges.
+// `top` is section-relative = section paddingTop (120) + the original canvas top,
+// since absolute children sit at the padding-box origin.
 const EDGE_PHOTOS = [
-  // top-right: couple on the street — flush to the RIGHT screen edge — fast (foreground feel)
+  // top-right: couple on the street — hugs the RIGHT edge — fast (foreground feel)
   {
-    src: assetUrl('/assets/Gallery/gallery-2.jpg'), alt: 'Joseph and Sherline',
-    top: 120, right: 0, width: 153, height: 171,
+    side: 'right', src: assetUrl('/assets/Gallery/gallery-2.jpg'), alt: 'Joseph and Sherline',
+    top: 120, width: 153, height: 171,
     innerTop: -14, innerLeft: -72, innerWidth: 299, innerHeight: 199,
     speed: 80,
   },
-  // bottom-left: leaning against the wall — flush to the LEFT screen edge — fastest (foreground pop)
+  // bottom-left: leaning against the wall — hugs the LEFT edge — fastest (foreground pop)
   {
-    src: assetUrl('/assets/Gallery/gallery-3.jpg'), alt: 'Joseph and Sherline',
-    top: 848, left: 0, width: 228, height: 171,
+    side: 'left', src: assetUrl('/assets/Gallery/gallery-3.jpg'), alt: 'Joseph and Sherline',
+    top: 848, width: 228, height: 171,
     innerTop: -115, innerLeft: -124, innerWidth: 451, innerHeight: 300,
     speed: 90,
   },
 ] as const
+
+// On screens wider than the 402px canvas, inset the edge photos by the side margin so
+// their outer edge lands exactly on the centred container edge (matches the rest of the page).
+const EDGE_DESKTOP_INSET = 'calc((100% - 402px) / 2)'
+
+// True below the `sm` breakpoint (640px) — i.e. phones. Client-only SPA, so we can read
+// matchMedia during the initial render (no SSR) which avoids a layout flash.
+function useIsMobile() {
+  const query = '(max-width: 639px)'
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia(query).matches)
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return isMobile
+}
 
 // Center hero slot (Figma node 155:3644 "main photo" 1-4, all 290x380) — auto-plays
 // through all 4 shots on a loop instead of a fixed photo
@@ -120,7 +141,7 @@ function ParallaxPhoto({
   src, alt, top, left, right, width, height, innerTop, innerLeft, innerWidth, innerHeight, speed,
 }: {
   src: string; alt: string
-  top: number; left?: number; right?: number; width: number; height: number
+  top: number; left?: number | string; right?: number | string; width: number; height: number
   innerTop: number; innerLeft: number; innerWidth: number; innerHeight: number
   speed: number
 }) {
@@ -144,6 +165,10 @@ export function Gallery() {
   // Total scene height: last photo bottom (841+176=1017) + 60px buffer for parallax overflow
   const SCENE_H = 1077
 
+  // Mobile → hug the screen edge; larger screens → tuck to the centred container edge
+  const isMobile = useIsMobile()
+  const edgeInset = isMobile ? 0 : EDGE_DESKTOP_INSET
+
   return (
     <section
       className="relative overflow-hidden"
@@ -156,9 +181,14 @@ export function Gallery() {
       }}
     >
       {/* Edge-anchored photos sit in the full-width section layer so they touch the true
-          screen edge on any mobile width (rendered first → the centred canvas paints on top) */}
-      {EDGE_PHOTOS.map((photo) => (
-        <ParallaxPhoto key={photo.src} {...photo} />
+          screen edge on mobile (rendered first → the centred canvas paints on top) */}
+      {EDGE_PHOTOS.map(({ side, ...photo }) => (
+        <ParallaxPhoto
+          key={photo.src}
+          {...photo}
+          left={side === 'left' ? edgeInset : undefined}
+          right={side === 'right' ? edgeInset : undefined}
+        />
       ))}
       {/* Scattered photo canvas, centred to 402px design width */}
       <div className="relative mx-auto" style={{ width: 402, height: SCENE_H }}>

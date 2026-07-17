@@ -21,7 +21,7 @@ Mobile-first wedding website for **Joseph & Sherline**, wedding date **Friday 18
 | Dress code (men) | Black tie |
 | Dress code (women) | Pastel earth tones — no red, no pink, no white |
 | Hotels | Shangri-La Sydney, Park Hyatt, Four Seasons Hotel |
-| RSVP endpoint | `VITE_RSVP_URL` env var → Google Apps Script Web App → Google Sheets |
+| RSVP | Handled externally via WhatsApp through guest-management partner, Pentamoo (no backend in this repo) |
 
 ---
 
@@ -34,7 +34,6 @@ Mobile-first wedding website for **Joseph & Sherline**, wedding date **Friday 18
 | Animation | Framer Motion 12 | All page transitions and scroll effects |
 | UI primitives | shadcn/ui pattern (manual, no CLI) | Radix UI under the hood |
 | Component explorer | Storybook 10 | `npm run storybook` → port 6006 |
-| RSVP backend | Google Apps Script Web App | POST to `VITE_RSVP_URL` |
 | Path alias | `@/` → `src/` | Configured in both `vite.config.ts` and `tsconfig.app.json` |
 
 ---
@@ -112,8 +111,7 @@ src/
       OurStory.tsx            ← story text + 4-photo tap-to-fan/collapse
       WeddingDay.tsx          ← ceremony + reception event cards
       Attire.tsx              ← dress code, 2-column, weather note
-      RSVPSection.tsx         ← "RSVP via Pentamoo" + attending toggle + form → Google Sheets
-      Hills.tsx               ← parallax hills scene + Registry (wishing well / cash fund collapsibles)
+      Hills.tsx               ← parallax hills scene + RSVP (external via Pentamoo/WhatsApp) + Registry (wishing well / cash fund collapsibles)
       Gallery.tsx             ← 2-column parallax photo grid
       RestartButton.tsx       ← resets AppState back to 'splash'
     ui/
@@ -126,7 +124,6 @@ src/
     useParallax.ts            ← Framer Motion scroll-based parallax
   lib/
     utils.ts                  ← cn() helper (clsx + tailwind-merge)
-    rsvp.ts                   ← submitRSVP() → POST to VITE_RSVP_URL
   stories/                    ← one .stories.tsx per component
   App.tsx                     ← state machine: 'splash' → 'reveal' → 'main'
   main.tsx
@@ -209,12 +206,9 @@ Do NOT use `/v1/images/{file_key}?ids=...` for this — that renders the frame a
 
 ---
 
-## RSVP setup (still needed)
+## RSVP
 
-1. Create a Google Sheet with columns: `name`, `guestCount`, `dietary`, `message`, `attending`, `timestamp`
-2. In Apps Script: deploy a Web App that writes POST body fields as a new row
-3. Add `VITE_RSVP_URL=<web-app-url>` to a `.env` file (gitignored)
-4. The form in `RSVPSection.tsx` calls `submitRSVP()` from `src/lib/rsvp.ts`
+RSVP is handled **externally** by guest-management partner **Pentamoo** via WhatsApp — there is no RSVP backend, form submission, or env var in this repo. The RSVP block lives in `Hills.tsx` and simply directs guests to Pentamoo. (Historically this posted to a Google Apps Script via `VITE_RSVP_URL`; that code and env var have been removed.)
 
 ---
 
