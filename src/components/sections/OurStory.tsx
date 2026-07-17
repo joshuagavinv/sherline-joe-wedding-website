@@ -189,7 +189,7 @@ export function OurStory() {
       </div>
 
       {/* Heading + body */}
-      <div className="px-8 mt-10 text-center text-wedding-cream">
+      <div className="px-8 mt-10 text-center text-wedding-cream-warm">
         <motion.h2
           className="font-serif text-display"
           initial={{ opacity: 0, y: 10 }}
@@ -200,16 +200,16 @@ export function OurStory() {
         </motion.h2>
 
         <motion.div
-          className="mt-6 mx-auto w-full max-w-52 font-sans text-body space-y-4"
+          className="mt-6 mx-auto w-full max-w-52 font-sans text-body leading-[1.22] space-y-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: inView ? 1 : 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
         >
           <p>
-            We bonded over curiosity, good conversation, and an impressive ability to turn "What should we eat?" into a full discussion. Banter quickly became our love language, equal parts dry humor, cynicism, and saying things that would sound mildly concerning out of context.
+            We bonded over curiosity, good conversation, and an impressive ability to turn “What should we eat?” into a full discussion. Banter quickly became our love language, equal parts dry humor, cynicism, and saying things that would sound mildly concerning out of context.
           </p>
           <p>
-            We keep the spark alive through creativity, curiosity, and conversations that bounce between life's biggest questions and completely unserious gossip.
+            We keep the spark alive through creativity, curiosity, and conversations that bounce between life’s biggest questions and completely unserious gossip.
           </p>
           <p>
             Beneath all of that, though, we love deeply, feel deeply, and somehow make each other feel at home. So here we are, choosing each other forever (though Joe might argue padel is a very close second), even if dinner still takes a while to decide.

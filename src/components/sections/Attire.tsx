@@ -150,8 +150,10 @@ export function Attire() {
         viewport={{ once: true }}
         transition={{ delay: 0.1, duration: 0.6 }}
       >
-        <p className="font-sans text-body font-medium text-center text-wedding-dark-brown px-8">Formal</p>
-        <p className="mt-2 font-sans text-body font-medium text-center text-wedding-dark-brown max-w-[279px] mx-auto px-8">
+        <p className="font-sans text-body font-medium text-center text-wedding-dark-brown px-8">
+          Formal (no <em className="italic">Batik</em>)
+        </p>
+        <p className="mt-2 font-sans text-body font-medium text-center text-wedding-dark-brown max-w-[279px] mx-auto">
           Please join us in creating an elegant atmosphere by dressing in your finest formal attire.
         </p>
       </motion.div>
@@ -212,7 +214,7 @@ export function Attire() {
       </motion.div>
 
       <motion.p
-        className="mt-8 font-sans text-body font-medium text-center text-wedding-dark-brown max-w-[279px] mx-auto px-8"
+        className="mt-8 font-sans text-body font-medium text-center text-wedding-dark-brown max-w-[279px] mx-auto"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -235,7 +237,7 @@ export function Attire() {
       </motion.div>
 
       <motion.p
-        className="mt-6 font-sans text-caption text-center text-wedding-dark-brown/60 max-w-[243px] mx-auto"
+        className="mt-6 font-sans text-body font-medium text-center text-wedding-dark-brown max-w-[243px] mx-auto"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}

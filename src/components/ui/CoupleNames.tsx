@@ -4,16 +4,21 @@ import { cn } from '@/lib/utils'
 function YoureInvitedArc() {
   return (
     <svg
-      viewBox="0 0 240 65"
-      width="240"
-      height="65"
+      viewBox="0 0 246 52"
+      width="246"
+      height="52"
       aria-hidden="true"
       className="mx-auto overflow-visible"
     >
       <defs>
-        <path id="invitedArc" d="M 5,55 Q 120,28 235,55" fill="none" />
+        {/* Circular arc (constant curvature → even letter rotation, matching
+            Figma's text-on-a-circle) reproducing node 169:1115's dome: ~224px
+            chord, ~30px sagitta, so the end words ("You're" / "of") tilt ~30°
+            and sit ~30px below the peak. viewBox width == the svg width attr, so
+            the 16.19px font renders 1:1 (no viewBox scaling of the glyphs). */}
+        <path id="invitedArc" d="M 11,46 A 224,224 0 0,1 235,46" fill="none" />
       </defs>
-      <text fontFamily="'EB Garamond', serif" fontSize="16.19" fill="currentColor">
+      <text className="font-garamond text-subhead font-medium" fill="currentColor">
         <textPath href="#invitedArc" startOffset="50%" textAnchor="middle">
           You&apos;re invited to the wedding of
         </textPath>

@@ -1,6 +1,7 @@
 export const weddingColors = {
   'warm-brown': '#B08D68',
   'cream': '#F3EEEE',
+  'cream-warm': '#F3EEE4', // warmer cream used for text on the Our Story green section (Figma node 169:1154)
   'dark-brown': '#614D47',
   'sage': '#E4E6B9',
   'sage-muted': '#83887F',
