@@ -4,11 +4,19 @@ import { assetUrl } from '@/lib/utils'
 
 // Building layers: width × height derived from each SVG's viewBox
 // parallaxRange: back layers move more (deeper), front layers move less
+//
+// z-stack (back → front):  back_rooms(1) · main_tower(2) · [cream mask · 3] ·
+// front_gates(4) · balcony(5). The cream MASK_Z sits between the two tall back
+// towers and the two front "base" layers. During the parallax entry every layer
+// is pushed down past the ground line; the back towers slide behind the cream
+// mask so their moving bottoms are hidden, while the front base layers stay in
+// front of the cream so the castle still reads as grounded on it.
+const MASK_Z = 3
 const BUILDING_LAYERS = [
   { src: assetUrl('/assets/Venue/venue_back_rooms.svg'),  w: 1734, h: 118, z: 1, range: 90 },
   { src: assetUrl('/assets/Venue/venue_main_tower.svg'),  w: 174,  h: 320, z: 2, range: 55 },
-  { src: assetUrl('/assets/Venue/venue_front_gates.svg'), w: 1670, h: 41,  z: 3, range: 25 },
-  { src: assetUrl('/assets/Venue/venue_balcony.svg'),     w: 175,  h: 76,  z: 4, range: 12 },
+  { src: assetUrl('/assets/Venue/venue_front_gates.svg'), w: 1670, h: 41,  z: 4, range: 25 },
+  { src: assetUrl('/assets/Venue/venue_balcony.svg'),     w: 175,  h: 76,  z: 5, range: 12 },
 ]
 
 const CLOUDS = [
@@ -38,7 +46,43 @@ export function VenueScene() {
   const layerY = [y0, y1, y2, y3]
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden" style={{ height: 320 }}>
+    // NOTE: the container itself is NOT `overflow-hidden`. Clipping at the box
+    // edge cut the layers off hard at the cream section below — making the castle
+    // look like it sank *behind* the cream. Instead, the parallax overshoot is
+    // hidden selectively by the cream MASK below: back towers slide behind it,
+    // front base layers stay in front so the castle reads as grounded ON the cream.
+    // Horizontal overflow from the oversized layers is still clipped by the
+    // page-level `overflow-x-clip` ancestor. Only the drifting clouds need
+    // clipping, so they get their own overflow-hidden sky box below.
+    <div ref={containerRef} className="relative" style={{ height: 320 }}>
+      {/* Cream mask — a cream panel starting at the ground line and extending
+          down into the cream section. It sits ABOVE the back towers (z 1–2) but
+          BELOW the front base layers (z 4–5), so the towers' parallax bottoms are
+          hidden as they slide over the cream while the base stays visible on it.
+          Full-width (100vw); anything wider is clipped by `overflow-x-clip`. */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 top-full w-screen bg-wedding-monogram-bg pointer-events-none"
+        style={{ height: 140, zIndex: MASK_Z }}
+      />
+
+      {/* Sky / clouds — clipped to the scene box so they never spill past its edges */}
+      <div className="absolute inset-0 overflow-hidden" style={{ zIndex: 10 }}>
+        {CLOUDS.map((cloud, i) => (
+          <div
+            key={i}
+            className={`absolute pointer-events-none animate-cloud ${cloud.className}`}
+            style={{
+              top: cloud.top,
+              left: 0,
+              '--cloud-duration': cloud.duration,
+              '--cloud-delay': cloud.delay,
+            } as React.CSSProperties}
+          >
+            <img src={cloud.src} width={cloud.vw} height={cloud.vh} alt="" className="w-full h-auto" />
+          </div>
+        ))}
+      </div>
+
       {BUILDING_LAYERS.map((layer, i) => (
         <motion.div
           key={layer.src}
@@ -55,22 +99,6 @@ export function VenueScene() {
             zIndex: layer.z,
           }}
         />
-      ))}
-
-      {CLOUDS.map((cloud, i) => (
-        <div
-          key={i}
-          className={`absolute pointer-events-none animate-cloud ${cloud.className}`}
-          style={{
-            top: cloud.top,
-            left: 0,
-            zIndex: 10,
-            '--cloud-duration': cloud.duration,
-            '--cloud-delay': cloud.delay,
-          } as React.CSSProperties}
-        >
-          <img src={cloud.src} width={cloud.vw} height={cloud.vh} alt="" className="w-full h-auto" />
-        </div>
       ))}
     </div>
   )

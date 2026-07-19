@@ -2,13 +2,15 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { assetUrl } from '@/lib/utils'
 
+// Palette swatches — six uniform 28×28 circles (Figma nodes 169:1576–169:1581).
+const SWATCH = 28
 const COLORS = [
-  { src: assetUrl('/assets/Attire/color1.svg'), w: 25, h: 31 },
-  { src: assetUrl('/assets/Attire/color2.svg'), w: 31, h: 28 },
-  { src: assetUrl('/assets/Attire/color4.svg'), w: 31, h: 28 },
-  { src: assetUrl('/assets/Attire/color5.svg'), w: 26, h: 32 },
-  { src: assetUrl('/assets/Attire/color6.svg'), w: 24, h: 32 },
-  { src: assetUrl('/assets/Attire/color7.svg'), w: 29, h: 30 },
+  assetUrl('/assets/Attire/swatch1.svg'), // #B8B886
+  assetUrl('/assets/Attire/swatch2.svg'), // #DEBE95
+  assetUrl('/assets/Attire/swatch3.svg'), // #A48471
+  assetUrl('/assets/Attire/swatch4.svg'), // #FEE5AF
+  assetUrl('/assets/Attire/swatch5.svg'), // #798964
+  assetUrl('/assets/Attire/swatch6.svg'), // #A3B9BC
 ]
 
 const GHOST = 0.12 // opacity of the off-centre "shadow" look
@@ -17,7 +19,7 @@ const GHOST = 0.12 // opacity of the off-centre "shadow" look
 // the same SINK px into it, so the two platforms line up regardless of how
 // tall the garment above them is (see Figma node 149:1497 / 149:1548).
 const PLATFORM_WIDTH = 136
-const PLATFORM_HEIGHT = 34.5
+const PLATFORM_HEIGHT = 34
 const SINK = 12
 const SUIT_HEIGHT = 240
 const DRESS_HEIGHT = 215
@@ -223,16 +225,16 @@ export function Attire() {
         Please wear colors from the palette below and avoid all shades of pink, red, and white.
       </motion.p>
 
-      {/* Colour swatches — pastel earth-tone palette */}
+      {/* Colour swatches — pastel earth-tone palette (Figma node 169:1575) */}
       <motion.div
-        className="mt-6 flex justify-center items-center gap-5 px-8"
+        className="mt-6 flex justify-center items-center gap-[21px] px-8"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2, duration: 0.6 }}
       >
-        {COLORS.map(({ src, w, h }, i) => (
-          <img key={i} src={src} alt="" style={{ width: w, height: h, flexShrink: 0 }} />
+        {COLORS.map((src, i) => (
+          <img key={i} src={src} alt="" style={{ width: SWATCH, height: SWATCH, flexShrink: 0 }} />
         ))}
       </motion.div>
 

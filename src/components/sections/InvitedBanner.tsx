@@ -25,7 +25,7 @@ const PLANT_RESERVE = PLANT_FIELD_HEIGHT - PLANT_BOTTOM_BLEED - FLOWER_FIELD_TOP
 // independent: this offset equals stemTip − dateBottom on every viewport. It's
 // negative, so the tall SIDE stems rise into the date's band — but they clear
 // the centred date/parentage text horizontally, so nothing overlaps the text.
-const TEXT_PLANT_GAP = -12
+const TEXT_PLANT_GAP = -20
 
 // Plant field layers, back → front. The static flower/grass/pulp fields are SVG
 // (cut from the original plants-bg, now each its own full-frame 1512×540 layer)
@@ -136,7 +136,7 @@ export function InvitedBanner() {
           className="absolute inset-0"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-          transition={{ duration: 1.3, delay: 0.4, ease: 'easeOut' }}
+          transition={{ duration: 1.05, delay: 0.15, ease: 'easeOut' }}
         >
           {/* SVG flower/grass/pulp layers interleaved with animated Lottie stems,
               back to front (see PLANT_LAYERS). Each layer gets its depth plane's

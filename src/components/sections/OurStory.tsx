@@ -83,7 +83,11 @@ export function OurStory() {
               const crop = CROP[photo.index] ?? { sx: 100, sy: 100, x: 50, y: 50 }
               // Cards further back sit a little lower so the whole stack peeks —
               // you always see a glimpse of the photos behind the front one.
-              const depth = photo.stackPos
+              // Keyed to the photo's fixed original index, not its position in the
+              // remaining stack (stackPos), so a card's y-offset never changes across
+              // its lifetime — when the front card exits, the ones behind hold still
+              // instead of visibly shifting upward as they're promoted.
+              const depth = photo.index
               return (
                 <motion.div
                   key={`${generation}-${photo.index}`}
@@ -144,7 +148,7 @@ export function OurStory() {
                 transition={{ delay: 0.3, duration: 0.3 }}
               >
                 <motion.span
-                  className="font-sans text-caption text-wedding-cream/40 uppercase tracking-ui-label"
+                  className="font-sans text-caption text-wedding-cream/40 uppercase tracking-[0.48px]"
                   animate={{ opacity: [0.3, 0.9, 0.3] }}
                   transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
                 >
@@ -200,7 +204,7 @@ export function OurStory() {
         </motion.h2>
 
         <motion.div
-          className="mt-6 mx-auto w-full max-w-52 font-sans text-body leading-[1.22] space-y-4"
+          className="mt-4 mx-auto w-full max-w-52 font-sans text-body leading-[1.32] space-y-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: inView ? 1 : 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
