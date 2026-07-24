@@ -7,16 +7,19 @@ import { assetUrl } from '@/lib/utils'
 //
 // z-stack (back → front):  back_rooms(1) · main_tower(2) · [cream mask · 3] ·
 // front_gates(4) · balcony(5). The cream MASK_Z sits between the two tall back
-// towers and the two front "base" layers. During the parallax entry every layer
-// is pushed down past the ground line; the back towers slide behind the cream
-// mask so their moving bottoms are hidden, while the front base layers stay in
-// front of the cream so the castle still reads as grounded on it.
+// towers and the two front "base" layers.
+//
+// The back towers keep a parallax `range` (they move on scroll) and slide BEHIND
+// the cream mask, so their moving bottoms are hidden below the ground line. The
+// two front "base" layers have `range: 0` — the ground of the castle never
+// translates, so its bottom edge stays planted exactly on the cream line and can
+// never dip below it or get clipped, no matter where the scroll sits.
 const MASK_Z = 3
 const BUILDING_LAYERS = [
   { src: assetUrl('/assets/Venue/venue_back_rooms.svg'),  w: 1734, h: 118, z: 1, range: 90 },
   { src: assetUrl('/assets/Venue/venue_main_tower.svg'),  w: 174,  h: 320, z: 2, range: 55 },
-  { src: assetUrl('/assets/Venue/venue_front_gates.svg'), w: 1670, h: 41,  z: 4, range: 25 },
-  { src: assetUrl('/assets/Venue/venue_balcony.svg'),     w: 175,  h: 76,  z: 5, range: 12 },
+  { src: assetUrl('/assets/Venue/venue_front_gates.svg'), w: 1670, h: 41,  z: 4, range: 0 },
+  { src: assetUrl('/assets/Venue/venue_balcony.svg'),     w: 175,  h: 76,  z: 5, range: 0 },
 ]
 
 const CLOUDS = [
