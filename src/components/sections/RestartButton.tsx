@@ -22,7 +22,7 @@ export function RestartButton({ onRestart }: RestartButtonProps) {
         <MonogramOval />
 
         <motion.span
-          className="font-sans text-body font-medium uppercase tracking-ui-label text-wedding-monogram-ink/50"
+          className="text-center font-sans text-body font-medium uppercase leading-[1.14] tracking-[0.48px] text-wedding-monogram-ink/50"
           animate={{ opacity: [0.35, 1, 0.35] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
         >

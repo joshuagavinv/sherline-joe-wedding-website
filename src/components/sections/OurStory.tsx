@@ -18,7 +18,18 @@ const STACK_W = 273
 const STACK_H = 282
 // Resting rotation (deg) per photo, front-of-stack first — matches the Figma fan.
 const ROT = [9.29, 2.54, -5.88, 0.76]
+// Resting vertical offset (px from the stack's center) per photo, front-first — from the
+// Figma fan (node 175:1197). The three back cards share one center (~+6) and only the
+// front card lifts (~-3), so the fan's spread comes from rotation, not a vertical
+// stair-step. (Previously depth * 7 = 0/7/14/21, which cascaded too far.)
+const OFFSET_Y = [-3, 6, 6, 6]
 const COVER_ROT = 2.5
+
+// Replay restack timing — cards fly back into the fan one at a time (RESTACK_STEP
+// apart), each dropping in over RESTACK_DUR. Back card returns first, front card last,
+// and the cover drops on top last of all.
+const RESTACK_STEP = 0.1
+const RESTACK_DUR = 0.55
 
 // Per-photo crop matching the Figma reveal states (nodes 149:1631–1652). Figma
 // places each image in a fixed box inside the 154×188 frame with object-fit: fill,
@@ -40,6 +51,9 @@ export function OurStory() {
   // True while the front card is flying away — guards against a second tap landing
   // mid-flight and desyncing the stack. Cleared when the exit finishes.
   const [advancing, setAdvancing] = useState(false)
+  // True during the replay restack — the cards fly back into the fan (reverse of how
+  // they left) and the cover drops on top last. Cleared once the cover finishes landing.
+  const [restacking, setRestacking] = useState(false)
 
   const remaining = photos.length - topIdx
   const stackPhotos = photos
@@ -56,6 +70,9 @@ export function OurStory() {
       setAdvancing(true)
       setTopIdx(i => i + 1)
     } else {
+      // Replay: refill the stack and drop the cover back on. `restacking` makes the
+      // cards fly back in (reverse order) instead of snapping straight into the fan.
+      setRestacking(true)
       setTopIdx(0)
       setGeneration(g => g + 1)
       setCovered(true)
@@ -81,13 +98,10 @@ export function OurStory() {
             {stackPhotos.map(photo => {
               const rot = ROT[photo.index] ?? 0
               const crop = CROP[photo.index] ?? { sx: 100, sy: 100, x: 50, y: 50 }
-              // Cards further back sit a little lower so the whole stack peeks —
-              // you always see a glimpse of the photos behind the front one.
-              // Keyed to the photo's fixed original index, not its position in the
-              // remaining stack (stackPos), so a card's y-offset never changes across
-              // its lifetime — when the front card exits, the ones behind hold still
-              // instead of visibly shifting upward as they're promoted.
-              const depth = photo.index
+              // Resting offset keyed to the fixed original index (not stackPos), so a
+              // card's spot never changes across its lifetime — when the front card exits,
+              // the ones behind hold still instead of visibly shifting.
+              const offsetY = OFFSET_Y[photo.index] ?? 0
               return (
                 <motion.div
                   key={`${generation}-${photo.index}`}
@@ -99,21 +113,26 @@ export function OurStory() {
                   // (Using stackPos re-tied the promoted card to the leaver's z-index,
                   // making it pop in front mid-flight.)
                   style={{ zIndex: photos.length - photo.index }}
-                  initial={false}
-                  // The whole stack stays visible the entire time — nothing vanishes.
-                  // When the front card flies off, the cards behind hold their place
-                  // and then step forward one notch (via the transition delay), so the
-                  // leaving photo clears before the next settles into the front spot.
-                  animate={{ opacity: 1, rotate: rot, y: depth * 7 }}
+                  // Resting fan matches Figma (node 175:1197): rotation + OFFSET_Y. Static —
+                  // identical whether the cover is on or lifted; tapping the cover just flies
+                  // it away to reveal the fan already sitting there.
+                  animate={{ opacity: 1, rotate: rot, y: offsetY }}
+                  // On replay the cards fly back and restack in reverse of how they left:
+                  // each drops in from where it exited (y:-440, under-rotated), back card
+                  // first and front card last (see the transition delay). Every other time
+                  // initial={false}, so the fan just shows in place — no drop-in on first
+                  // load, on reveal, or as cards advance.
+                  initial={restacking ? { opacity: 0, y: -440, rotate: rot - 14 } : false}
                   // Slide accelerates (easeIn); opacity fades linearly across the full
-                  // (lengthened) flight, so the card lingers visible and melts away
-                  // gradually as it lifts instead of popping out at the top.
+                  // flight, so a departing card lingers visible and melts away as it lifts.
                   exit={{ y: -440, rotate: rot - 14, opacity: 0, transition: { duration: 0.55, ease: 'easeIn', opacity: { duration: 0.55, ease: 'linear' } } }}
-                  // delay (0.58) outlasts the longer exit (0.55) so the front card
-                  // flies fully clear of a still stack — with a beat of empty space —
-                  // before the fan steps forward, the same calm the cover lifts off.
-                  // Overshoot (1.4) matches the cover.
-                  transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1], delay: 0.58 }}
+                  // Restack: reverse-order stagger (back card at delay 0, front card last)
+                  // with a soft overshoot landing. Idle otherwise (animate never changes).
+                  transition={
+                    restacking
+                      ? { duration: RESTACK_DUR, ease: [0.34, 1.4, 0.64, 1], delay: (photos.length - 1 - photo.index) * RESTACK_STEP }
+                      : { duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }
+                  }
                 >
                   <div style={{ width: CARD_W, height: CARD_H }}>
                     {/* Outer owns the frame border; inner owns the overflow clip
@@ -163,13 +182,24 @@ export function OurStory() {
                 key="cover"
                 className="absolute inset-0 flex items-center justify-center"
                 style={{ zIndex: 30 }}
-                initial={false}
-                animate={{ opacity: 1, y: 0, rotate: COVER_ROT, scale: 1 }}
-                transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
+                // On replay the cover drops back on top last — after every photo has
+                // restacked (delay = photos.length * step) — like the final card returning
+                // to the pile. Otherwise initial={false}: it's simply there.
+                initial={restacking ? { opacity: 0, y: -440, rotate: COVER_ROT - 14 } : false}
+                // Rests at +6 (Figma node 175:1197, cy≈147) — level with the back photos,
+                // so the lifted front photo (-3) pokes above the cover's top edge.
+                animate={{ opacity: 1, y: 6, rotate: COVER_ROT, scale: 1 }}
+                transition={
+                  restacking
+                    ? { duration: RESTACK_DUR, ease: [0.34, 1.4, 0.64, 1], delay: photos.length * RESTACK_STEP }
+                    : { duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }
+                }
+                // The cover lands last, so its completion ends the restack.
+                onAnimationComplete={() => { if (restacking) setRestacking(false) }}
                 exit={{ y: -440, rotate: COVER_ROT - 14, opacity: 0, transition: { duration: 0.55, ease: 'easeIn', opacity: { duration: 0.55, ease: 'linear' } } }}
               >
                 <div
-                  className="border-photo border-wedding-photo-border bg-wedding-monogram-bg overflow-hidden flex flex-col items-center justify-center gap-3"
+                  className="border-photo border-wedding-splash-bg bg-wedding-monogram-bg overflow-hidden flex flex-col items-center justify-center gap-3"
                   style={{ width: CARD_W, height: CARD_H }}
                 >
                   <img
@@ -178,7 +208,7 @@ export function OurStory() {
                     className="w-[108px] h-[84px] object-contain"
                   />
                   <motion.span
-                    className="font-sans text-caption text-wedding-ink/25 uppercase tracking-ui-label"
+                    className="font-sans text-caption text-wedding-ink/25 uppercase tracking-[0.48px]"
                     animate={{ opacity: [0.35, 1, 0.35] }}
                     transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
                   >

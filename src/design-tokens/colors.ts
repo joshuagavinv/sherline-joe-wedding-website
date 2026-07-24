@@ -6,12 +6,12 @@ export const weddingColors = {
   'sage': '#E4E6B9',
   'sage-muted': '#83887F',
   'sage-light': '#B2BE83',
-  'photo-border': '#E4E3C3',
+  'photo-border': '#E4DAC4', // 6px frame border on photos — exact Figma value (node 175:1197); prior #E4E3C3 read greener
   'gray': '#D9D9D9',
   'splash-bg': '#DED3C0',
   'monogram-bg': '#F3EEE4',
   'monogram-ink': '#615247',
   'ink': '#241000',
-  'story-bg': '#8B9553', // matches the grass green baked into the plant illustration (grass.svg) so the field blends seamlessly into the section below
+  'story-bg': '#909663', // matches the grass green baked into the plant illustration (grass.svg) so the field blends seamlessly into the section below (same value as hill-green)
   'hill-green': '#909663', // matches the front hill SVG (hills_front.svg) so the Hills section body / Registry merges seamlessly into the hill above
 } as const

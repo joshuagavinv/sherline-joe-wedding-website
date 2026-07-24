@@ -1,23 +1,19 @@
 import { motion } from 'framer-motion'
+import { assetUrl } from '@/lib/utils'
 
+// "The Wedding Day" arc — the exact Figma export (node 175:1576) as an outlined
+// SVG, so the curve, letter rotation, weight and monogram-ink colour all match
+// the design 1:1 (no hand-built textPath to keep in sync). Rendered at its
+// native 120×26 so it reads at the same size as the Figma artwork.
 function WeddingDayArc() {
   return (
-    <svg
-      viewBox="0 0 240 65"
-      width="240"
-      height="65"
-      aria-hidden="true"
-      className="mx-auto overflow-visible"
-    >
-      <defs>
-        <path id="weddingDayArc" d="M 5,55 Q 120,28 235,55" fill="none" />
-      </defs>
-      <text fontFamily="'EB Garamond', serif" fontSize="16.19" fill="currentColor">
-        <textPath href="#weddingDayArc" startOffset="50%" textAnchor="middle">
-          The Wedding Day
-        </textPath>
-      </text>
-    </svg>
+    <img
+      src={assetUrl('/assets/the-wedding-day.svg')}
+      alt="The Wedding Day"
+      width={120}
+      height={26}
+      className="mx-auto block"
+    />
   )
 }
 
@@ -25,18 +21,21 @@ const events = [
   {
     title: 'Holy Matrimony',
     time: '11:30 AM',
-    venueLines: ['Mary Immaculate Catholic Church,', 'Waverley NSW'],
+    venueLines: ['Mary Immaculate Catholic Church,', 'Waverley NSW, Australia'],
   },
   {
     title: 'The Reception',
     time: '6:00 PM',
-    venueLines: ['Grand Banquet Room', 'at Curzon Hall, Marsfield NSW'],
+    venueLines: ['Grand Banquet Room', 'at Curzon Hall, Marsfield NSW, Australia'],
   },
 ]
 
 export function WeddingDay() {
   return (
-    <section className="bg-wedding-monogram-bg px-8 py-16 text-center">
+    // `relative z-10` lifts this section above the VenueScene cream MASK (z-3),
+    // which extends ~140px past the castle scene and would otherwise paint over
+    // the "The Wedding Day" arc that sits at the top of this section.
+    <section className="relative z-10 bg-wedding-monogram-bg px-8 py-16 text-center">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -46,7 +45,7 @@ export function WeddingDay() {
         <WeddingDayArc />
       </motion.div>
 
-      <div className="mt-16 flex flex-col gap-[72px]">
+      <div className="mt-9 flex flex-col gap-[72px]">
         {events.map((event, i) => (
           <motion.div
             key={event.title}
