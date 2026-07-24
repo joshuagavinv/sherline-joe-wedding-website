@@ -26,7 +26,7 @@ const events = [
   {
     title: 'The Reception',
     time: '6:00 PM',
-    venueLines: ['Grand Banquet Room', 'at Curzon Hall, Marsfield NSW, Australia'],
+    venueLines: ['Grand Banquet Room at Curzon Hall', 'Marsfield NSW, Australia'],
   },
 ]
 

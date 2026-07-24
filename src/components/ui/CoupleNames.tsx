@@ -74,7 +74,7 @@ export function CoupleNames({ className, reveal }: CoupleNamesProps) {
       </motion.p>
 
       <motion.p className="mt-[13px] font-sans text-body font-medium leading-[1.14]" {...line(0.88)}>
-        Son of Tjan Soen Eng <br /> and Mirjam Nugraha
+        Son of Tjan Soen Eng and <br /> Mirjam Gwenny Nugraha
       </motion.p>
 
       <motion.p className="mt-[18px] font-serif text-connector text-wedding-dark-brown" {...line(0.5)}>

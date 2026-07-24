@@ -17,14 +17,17 @@ export function RestartButton({ onRestart }: RestartButtonProps) {
       <button
         onClick={onRestart}
         aria-label="Restart"
-        className="group flex flex-col items-center gap-8 cursor-pointer"
+        className="group flex flex-col items-center gap-3 cursor-pointer"
       >
         <MonogramOval />
 
         <motion.span
           className="text-center font-sans text-body font-medium uppercase leading-[1.14] tracking-[0.48px] text-wedding-monogram-ink/50"
-          animate={{ opacity: [0.35, 1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: [0, 1],
+            transition: { delay: 0.9, duration: 1.4, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
+          }}
         >
           Restart
         </motion.span>
