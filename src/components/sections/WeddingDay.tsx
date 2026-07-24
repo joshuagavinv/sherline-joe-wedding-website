@@ -62,7 +62,7 @@ export function WeddingDay() {
               <p className="leading-[1.14]">{event.time}</p>
               <div>
                 {event.venueLines.map((line) => (
-                  <p key={line} className="leading-[1.26]">{line}</p>
+                  <p key={line}>{line}</p>
                 ))}
               </div>
             </div>
