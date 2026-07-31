@@ -26,13 +26,22 @@ const config: Config = {
         sans: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        display: ['56px', { lineHeight: '1.1' }],
+        display: ['56px', { lineHeight: '1' }],
         heading: ['32px', { lineHeight: '1.2' }],
         connector: ['26px', { lineHeight: '1.2' }],
         subhead: ['16.19px', { lineHeight: '1.4' }],
         parentage: ['9.52px', { lineHeight: '1.5' }],
         body: ['12px', { lineHeight: '1.6' }],
         caption: ['10px', { lineHeight: '1.5' }],
+      },
+      lineHeight: {
+        // Tight leading for short single/double-line micro-copy set in
+        // text-body (event times, venue lines, parent names, UI tickers) —
+        // the 1.6 body default reads too loose at that scale.
+        label: '1.14',
+        // Our Story's multi-line paragraph copy — tighter than the 1.6 body
+        // default but more open than `label`, for long-form readability.
+        prose: '1.32',
       },
       letterSpacing: {
         'ui-label': '0.48em',

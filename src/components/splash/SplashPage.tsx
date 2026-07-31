@@ -100,7 +100,7 @@ export function SplashPage({ onComplete, onExpandStart, autoExpand = false }: Sp
       <AnimatePresence>
         {!expanding && (
           <motion.p
-            className="absolute top-[calc(50%+115px)] text-center font-sans text-body font-medium uppercase leading-[1.14] tracking-[0.48px] text-wedding-monogram-ink/50"
+            className="absolute top-[calc(50%+115px)] text-center font-sans text-body font-medium uppercase leading-label tracking-[0.48px] text-wedding-monogram-ink/50"
             initial={{ opacity: 0 }}
             animate={{
               opacity: [0, 1],

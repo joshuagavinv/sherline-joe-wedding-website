@@ -234,7 +234,7 @@ export function OurStory() {
         </motion.h2>
 
         <motion.div
-          className="mt-4 mx-auto w-full max-w-52 font-sans text-body leading-[1.32] space-y-4"
+          className="mt-4 mx-auto w-full max-w-52 font-sans text-body leading-prose space-y-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: inView ? 1 : 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}

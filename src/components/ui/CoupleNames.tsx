@@ -69,11 +69,11 @@ export function CoupleNames({ className, reveal }: CoupleNamesProps) {
         <YoureInvitedArc />
       </motion.div>
 
-      <motion.p className="mt-1 font-serif text-display leading-none" {...line(0.5)}>
+      <motion.p className="mt-1 font-serif text-display" {...line(0.5)}>
         Joseph
       </motion.p>
 
-      <motion.p className="mt-[13px] font-sans text-body font-medium leading-[1.14]" {...line(0.88)}>
+      <motion.p className="mt-[13px] font-sans text-body font-medium leading-label" {...line(0.88)}>
         Son of Tjan Soen Eng and <br /> Mirjam Gwenny Nugraha
       </motion.p>
 
@@ -81,11 +81,11 @@ export function CoupleNames({ className, reveal }: CoupleNamesProps) {
         and
       </motion.p>
 
-      <motion.p className="mt-[15px] font-serif text-display leading-none" {...line(0.5)}>
+      <motion.p className="mt-[15px] font-serif text-display" {...line(0.5)}>
         Sherline
       </motion.p>
 
-      <motion.p className="mt-1 font-sans text-body font-medium leading-[1.14]" {...line(0.94)}>
+      <motion.p className="mt-1 font-sans text-body font-medium leading-label" {...line(0.94)}>
         Daughter of Alouisius Maseimilian <br /> and Venny Martadinata
       </motion.p>
 
