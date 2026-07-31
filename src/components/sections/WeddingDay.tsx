@@ -58,7 +58,7 @@ export function WeddingDay() {
             <h3 className="font-serif text-heading text-wedding-dark-brown">
               {event.title}
             </h3>
-            <div className="flex flex-col items-center gap-2 font-sans text-body font-medium leading-label text-wedding-dark-brown tracking-[-0.24px]">
+            <div className="flex flex-col items-center gap-2 font-sans text-body font-medium text-wedding-dark-brown tracking-[-0.24px]">
               <p>{event.time}</p>
               <div>
                 {event.venueLines.map((line) => (
