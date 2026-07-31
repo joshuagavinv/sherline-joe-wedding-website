@@ -37,11 +37,9 @@ const config: Config = {
       lineHeight: {
         // Tight leading for short single/double-line micro-copy set in
         // text-body (event times, venue lines, parent names, UI tickers) —
-        // the 1.6 body default reads too loose at that scale.
+        // the 1.6 body default (correct for longer-form copy like Attire's)
+        // reads too loose at that scale.
         label: '1.14',
-        // Our Story's multi-line paragraph copy — tighter than the 1.6 body
-        // default but more open than `label`, for long-form readability.
-        prose: '1.32',
       },
       letterSpacing: {
         'ui-label': '0.48em',
