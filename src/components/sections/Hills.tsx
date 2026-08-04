@@ -195,7 +195,7 @@ export function Hills() {
           <p className="font-sans text-body tracking-[-0.24px]">
             Your presence is the greatest gift to us, and we're really looking forward to
             celebrating with you. However, if you wish to bless us with a gift, we kindly offer
-            the following options.
+            the following options below.
           </p>
         </div>
 

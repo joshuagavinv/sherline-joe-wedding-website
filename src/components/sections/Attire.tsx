@@ -222,7 +222,7 @@ export function Attire() {
         viewport={{ once: true }}
         transition={{ delay: 0.15, duration: 0.6 }}
       >
-        Please wear colors from the palette below and avoid all shades of pink, red, and white.
+        Please wear colors from the palette below. Black suits are welcome. Please avoid all shades of pink, red, and white.
       </motion.p>
 
       {/* Colour swatches — pastel earth-tone palette (Figma node 169:1575) */}
