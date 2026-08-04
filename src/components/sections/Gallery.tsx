@@ -190,8 +190,15 @@ export function Gallery() {
           right={side === 'right' ? edgeInset : undefined}
         />
       ))}
-      {/* Scattered photo canvas, centred to 402px design width */}
-      <div className="relative mx-auto" style={{ width: 402, height: SCENE_H }}>
+      {/* Scattered photo canvas, centred to 402px design width. Centre with a
+          left:50% + translateX(-50%) transform rather than mx-auto so it stays
+          centred even when the viewport is narrower than 402px (auto margins
+          can't go negative, so mx-auto would pin the box to the left edge and
+          push the main photo off-centre). */}
+      <div
+        className="relative"
+        style={{ width: 402, height: SCENE_H, left: '50%', transform: 'translateX(-50%)' }}
+      >
         {PHOTOS.map((photo) => (
           <ParallaxPhoto key={photo.src} {...photo} />
         ))}
