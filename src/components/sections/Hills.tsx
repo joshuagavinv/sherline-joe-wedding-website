@@ -59,16 +59,27 @@ const LAYERS: Layer[] = [
 const REGISTRY_ITEMS = [
   {
     title: 'Wishing well',
-    body: 'A wishing well will be available at the reception should you prefer to gift in person.',
+    body: (
+      <>
+        A wishing well will be available at the reception
+        <br />
+        should you prefer to gift in person.
+      </>
+    ),
   },
   {
     title: 'Bank transfer',
     body: (
       <>
-        <p>If you prefer, you may also gift via bank transfer using our shared account below:</p>
+        <p>
+          If you prefer, you may also gift via bank transfer using
+          <br />
+          our shared account below:
+        </p>
         <p aria-hidden="true">&nbsp;</p>
         <p>
           <span className="font-semibold">Account Name:</span> Vincentius Joseph Tjan and Sherline
+          <br />
           Angelica Maseimilian
         </p>
         <p>
@@ -193,8 +204,12 @@ export function Hills() {
         <div className="flex flex-col gap-3">
           <h2 className="font-serif text-heading">Gifts</h2>
           <p className="font-sans text-body tracking-[-0.24px]">
-            Your presence is the greatest gift to us, and we're really looking forward to
-            celebrating with you. If you wish to bless us with a gift, we kindly offer the
+            Your presence is the greatest gift to us, and we're
+            <br />
+            really looking forward to celebrating with you. If
+            <br />
+            you wish to bless us with a gift, we kindly offer the
+            <br />
             following options.
           </p>
         </div>
