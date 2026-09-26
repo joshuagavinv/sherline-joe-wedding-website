@@ -55,14 +55,14 @@ const LAYERS: Layer[] = [
     box: { top: '50.75%', right: '0.07%', bottom: 0, left: 0 } },
 ]
 
-// Registry copy (Figma node 149:1461) — wishing-well / cash-fund particulars.
+// Gifts copy (Figma node 190:1421) — wishing-well / bank-transfer particulars.
 const REGISTRY_ITEMS = [
   {
     title: 'Wishing well',
     body: 'A wishing well will be available at the reception should you prefer to gift in person.',
   },
   {
-    title: 'Cash fund',
+    title: 'Bank transfer',
     body: (
       <>
         <p>If you prefer, you may also gift via bank transfer using our shared account below:</p>
@@ -182,7 +182,7 @@ export function Hills() {
         </div>
       </div>
 
-      {/* Content: Registry (Figma node 146:1491) */}
+      {/* Content: Gifts (Figma node 190:1421) */}
       <motion.div
         className="w-full max-w-canvas mx-auto px-8 pb-20 flex flex-col gap-6 text-wedding-cream"
         initial={{ opacity: 0, y: 16 }}
@@ -191,11 +191,11 @@ export function Hills() {
         transition={{ duration: 0.6 }}
       >
         <div className="flex flex-col gap-3">
-          <h2 className="font-serif text-heading">Registry</h2>
+          <h2 className="font-serif text-heading">Gifts</h2>
           <p className="font-sans text-body tracking-[-0.24px]">
             Your presence is the greatest gift to us, and we're really looking forward to
-            celebrating with you. However, if you wish to bless us with a gift, we kindly offer
-            the following options below.
+            celebrating with you. If you wish to bless us with a gift, we kindly offer the
+            following options.
           </p>
         </div>
 
