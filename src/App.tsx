@@ -12,6 +12,7 @@ import { Farewell } from '@/components/sections/Farewell'
 import { RestartButton } from '@/components/sections/RestartButton'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 import { FallingLeaves } from '@/components/ui/FallingLeaves'
+import { useBackgroundAudio } from '@/hooks/useBackgroundAudio'
 
 type AppState = 'splash' | 'main'
 
@@ -24,13 +25,20 @@ export default function App() {
   // on restart, never during the splash → main handoff, so the names still
   // never remount (and never shift) on that transition.
   const [namesKey, setNamesKey] = useState(0)
+  const { play: playMusic, unlock: unlockMusic } = useBackgroundAudio('/assets/audio/with-me.mp3')
 
+  // Music starts once the splash expansion finishes, then loops forever.
   const handleSplashComplete = useCallback(() => {
     setState('main')
     setAutoExpand(false)
-  }, [])
+    playMusic()
+  }, [playMusic])
 
-  const handleExpandStart = useCallback(() => setShowNames(true), [])
+  // Unlock audio inside the tap gesture so the delayed play() above is allowed.
+  const handleExpandStart = useCallback(() => {
+    setShowNames(true)
+    unlockMusic()
+  }, [unlockMusic])
 
   const handleRestart = useCallback(() => {
     window.scrollTo({ top: 0 })
