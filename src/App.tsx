@@ -12,6 +12,7 @@ import { Farewell } from '@/components/sections/Farewell'
 import { RestartButton } from '@/components/sections/RestartButton'
 import { CoupleNames } from '@/components/ui/CoupleNames'
 import { FallingLeaves } from '@/components/ui/FallingLeaves'
+import { AudioToggle } from '@/components/ui/AudioToggle'
 import { useBackgroundAudio } from '@/hooks/useBackgroundAudio'
 
 type AppState = 'splash' | 'main'
@@ -25,7 +26,12 @@ export default function App() {
   // on restart, never during the splash → main handoff, so the names still
   // never remount (and never shift) on that transition.
   const [namesKey, setNamesKey] = useState(0)
-  const { play: playMusic, unlock: unlockMusic } = useBackgroundAudio('/assets/audio/with-me.mp3')
+  const {
+    play: playMusic,
+    unlock: unlockMusic,
+    muted: musicMuted,
+    toggleMute: toggleMusicMute,
+  } = useBackgroundAudio('/assets/audio/with-me.mp3')
 
   // Music starts once the splash expansion finishes, then loops forever.
   const handleSplashComplete = useCallback(() => {
@@ -116,9 +122,13 @@ export default function App() {
       </div>
 
       {/* Falling leaves — overlay above the names (z-65 > the names' z-60) but
-          below the sticky RSVP pill (z-70), so they drift in front of
-          "Joseph & Sherline" without covering the CTA. Only on the main view. */}
+          below the sticky audio toggle (z-70), so they drift in front of
+          "Joseph & Sherline" without covering the control. Only on the main view. */}
       {state === 'main' && <FallingLeaves />}
+
+      {/* Sticky volume / mute toggle, bottom-left. Only on the main view, where
+          the music plays. */}
+      {state === 'main' && <AudioToggle muted={musicMuted} onToggle={toggleMusicMute} />}
     </div>
   )
 }
