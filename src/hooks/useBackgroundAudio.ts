@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 /**
  * Looping background track.
@@ -7,10 +7,16 @@ import { useCallback, useEffect, useRef } from 'react'
  * but we want the music to begin *after* the splash expansion — ~1.8s after the
  * tap. So `unlock()` runs inside the tap handler: a muted play()/pause() that
  * marks the element as user-activated. `play()` can then start it for real later.
+ *
+ * `muted` is the guest's choice from the volume toggle. It's mirrored in a ref so
+ * unlock()/play() restore it (instead of forcing sound back on) after their own
+ * temporary muting — e.g. a restart never unmutes a guest who muted.
  */
 export function useBackgroundAudio(src: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const wantsPlayRef = useRef(false)
+  const [muted, setMuted] = useState(false)
+  const mutedRef = useRef(false)
 
   useEffect(() => {
     const audio = new Audio(src)
@@ -33,15 +39,15 @@ export function useBackgroundAudio(src: string) {
       .then(() => {
         // If play() was requested while unlocking, keep going instead of pausing.
         if (wantsPlayRef.current) {
-          audio.muted = false
+          audio.muted = mutedRef.current
           return
         }
         audio.pause()
         audio.currentTime = 0
-        audio.muted = false
+        audio.muted = mutedRef.current
       })
       .catch(() => {
-        audio.muted = false
+        audio.muted = mutedRef.current
       })
   }, [])
 
@@ -49,11 +55,22 @@ export function useBackgroundAudio(src: string) {
     const audio = audioRef.current
     if (!audio) return
     wantsPlayRef.current = true
-    audio.muted = false
+    audio.muted = mutedRef.current
     if (!audio.paused) return
     // Autoplay can still be refused (no gesture, e.g. Storybook autoExpand) — fail silently.
     audio.play().catch(() => {})
   }, [])
 
-  return { unlock, play }
+  const toggleMute = useCallback(() => {
+    const audio = audioRef.current
+    const next = !mutedRef.current
+    mutedRef.current = next
+    setMuted(next)
+    if (!audio) return
+    audio.muted = next
+    // Unmuting is a user gesture — use it to start playback if autoplay was refused.
+    if (!next && audio.paused && wantsPlayRef.current) audio.play().catch(() => {})
+  }, [])
+
+  return { unlock, play, muted, toggleMute }
 }
